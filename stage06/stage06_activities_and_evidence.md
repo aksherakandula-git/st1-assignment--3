@@ -2,65 +2,73 @@
 
 Complete this one group record. Link actual issues, diffs, tests and reviews; avoid copying entire histories. Blank fields are intentional. Duplicate rows as needed. Use synthetic data only. Every member records their own meaningful contribution. Do not invent results, reviews or Copilot use.
 
-- Group/tutorial: [response]
-- Members, GitHub usernames and cohorts: [response]
-- Repository URL: [response]
-- Starting SHA: [response]
+- Group/tutorial: [4483 Software Technology 1 – Online Group 3, Tuesday 5:30–7:30 pm]
+- Members, GitHub usernames and cohorts: [Akshera Kandula – aksherakandula-git – UG; Harleen Partola – Harleenpartola – UG]
+- Repository URL: [https://github.com/aksherakandula-git/st1-assignment--3]
+- Starting SHA: [db5f939e1ca707e4cbe5cce43d4127da61f705f]
 
 ## A Requirement to issue activities
 
 ### FR-02 Patient Search
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
-- Acceptance criteria: [response]
-- Scope: [response]
-- Definition of Done: [response]
-- Owner: [response]
+- Title: Implement FR-02 patient search by ID
+- Context: SmartCare can register patients, but PatientService.find_patient is currently incomplete. The service needs to retrieve a registered patient from the shared session store using the patient ID while preserving the supplied validation and object identity rules.
+- Requirement: FR-02 Patient Search — allow a registered patient to be retrieved by patient ID through PatientService.
+- Acceptance criteria: A known valid patient ID returns the actual registered Patient object. Surrounding whitespace is trimmed and IDs remain case-sensitive. A valid but unknown ID raises LookupError, while a blank or invalid ID raises ValueError. Lookup must not create or replace a patient.
+- Scope: Implement PatientService.find_patient and focused tests only. Do not add name searching, fuzzy searching, persistence, authentication, console changes or Stage 9 functionality.
+- Definition of Done: The lookup satisfies the published service contract; known, unknown, trimmed, case-sensitive and invalid ID behaviour is meaningfully tested; existing tests continue to pass; the work is reviewed by another team member; feedback is resolved; and the reviewed change is merged and verified on main.
+- Owner: Akshera Kandula — aksherakandula-git
 - Actual issue link: [response]
 
 ### FR-06 Appointment Cancellation with FR-07 retained history
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
-- Acceptance criteria: [response]
-- Scope: [response]
-- Definition of Done: [response]
-- Owner: [response]
+- Title: Implement FR-06 appointment cancellation with FR-07 retained history
+- Context: The Appointment domain object already provides guarded cancellation, but AppointmentService.cancel_appointment is currently incomplete. The service must coordinate cancellation while retaining the same appointment object in the shared session history.
+- Requirement: FR-06 Appointment Cancellation together with FR-07 Retained Appointment History.
+- Acceptance criteria: Cancelling a stored SCHEDULED appointment changes that same object's status to CANCELLED, returns the same object and keeps it retrievable from the store. Repeated cancellation and cancellation of a COMPLETED appointment raise ValueError without changing state. A valid but unknown appointment ID raises LookupError, while a blank or invalid ID raises ValueError.
+- Scope: Implement only the Stage 6 appointment cancellation service workflow and focused tests. Do not delete appointments, directly change protected state, create replacement appointments, add notifications, add rescheduling or implement Stage 9 functionality.
+- Definition of Done: Cancellation uses the supplied Appointment.cancel() domain transition; object identity, CANCELLED status and retained history are demonstrated; successful and rejected operations are meaningfully tested; existing behaviour remains passing; another team member reviews the change; feedback is resolved; and the reviewed change is merged and verified on main.
+- Owner: Akshera Kandula — aksherakandula-git
 - Actual issue link: [response]
 
 ## B Commit quality
-
 | Original example | Strong or Weak | Reason |
 |---|---|---|
-| changes | [select] | [response] |
-| final version | [select] | [response] |
-| Add patient search by ID | [select] | [response] |
-| fix stuff | [select] | [response] |
-| Prevent cancellation of completed appointments | [select] | [response] |
+| changes | Weak | This is too vague because it does not explain what behaviour or part of the system changed. |
+| final version | Weak | This does not describe the engineering change and gives a reviewer no useful information about the commit. |
+| Add patient search by ID | Strong | This clearly identifies the behaviour implemented and gives the commit a focused purpose. |
+| fix stuff | Weak | This is vague and does not identify what problem was fixed or which behaviour changed. |
+| Prevent cancellation of completed appointments | Strong | This describes a specific behavioural rule being enforced and clearly communicates the purpose of the change. |
 
 ## C Over scoped PR review
 
 A cancellation PR also renames unrelated patient fields, restructures unrelated code and adds a new dependency.
 
-- Scope concerns: [response]
-- Responsibility and architecture concerns: [response]
-- Testing and review concerns: [response]
-- Changes to remove or separate, with reasons: [response]
+- Scope concerns: The PR should focus on appointment cancellation. Renaming unrelated patient fields, restructuring unrelated code and adding a new dependency unnecessarily increases the scope and makes the cancellation change harder to review against FR-06 and FR-07.
+
+- Responsibility and architecture concerns: `AppointmentService` should coordinate the cancellation workflow while the `Appointment` domain object remains responsible for its state transition. Unrelated restructuring could blur these responsibilities and introduce unnecessary coupling.
+
+- Testing and review concerns: A passing test suite alone does not prove that all unrelated changes are correct or necessary. The cancellation change needs focused evidence for successful cancellation, retained history, illegal state transitions, invalid and unknown IDs, and unchanged state after rejected operations.
+
+- Changes to remove or separate, with reasons: The unrelated patient-field renaming, unrelated restructuring and new dependency should be removed from this PR. If any of these changes are genuinely required, they should have their own issue, focused branch, tests and PR so they can be reviewed independently.
 
 ## D Challenge a weak Copilot review
 
 GitHub Copilot says: "Looks good; tests pass."
 
-- Missing evidence: [response]
-- Follow-up review question 1: [response]
-- Follow-up review question 2: [response]
-- Follow-up review question 3: [response]
-- Follow-up review question 4: [response]
-- Follow-up review question 5: [response]
-- Additional questions if useful: [response]
+- Missing evidence: The statement "Looks good; tests pass" does not show which requirement or acceptance criteria were checked, what changed in the actual diff, whether SmartCare responsibility boundaries were preserved, whether the test assertions meaningfully verify the required behaviour, whether unrelated changes were introduced, or what test command and result were actually observed.
+
+- Follow-up review question 1: Which changed lines satisfy each linked requirement and acceptance criterion?
+
+- Follow-up review question 2: Do the tests verify the required object identity, state, retained history and documented exception behaviour rather than only checking that an object exists?
+
+- Follow-up review question 3: Does the implementation preserve SmartCare's responsibility boundaries, with services coordinating workflows, the store retaining objects and `Appointment` controlling its own state transition?
+
+- Follow-up review question 4: Does the diff contain unrelated changes, new dependencies or unnecessary architectural changes that should be removed or moved to another PR?
+
+- Follow-up review question 5: What exact test command and observed result provide evidence that both the focused behaviour and the full regression suite pass?
+
+- Additional question: What required behaviour remains untested or uncertain even if the current tests pass?
 
 ## E Team workflow agreement
 
