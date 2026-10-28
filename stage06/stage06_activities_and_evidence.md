@@ -18,7 +18,7 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Scope: Implement PatientService.find_patient and focused tests only. Do not add name searching, fuzzy searching, persistence, authentication, console changes or Stage 9 functionality.
 - Definition of Done: The lookup satisfies the published service contract; known, unknown, trimmed, case-sensitive and invalid ID behaviour is meaningfully tested; existing tests continue to pass; the work is reviewed by another team member; feedback is resolved; and the reviewed change is merged and verified on main.
 - Owner: Akshera Kandula — aksherakandula-git
-- Actual issue link: [response]
+- Actual issue link: https://github.com/aksherakandula-git/st1-assignment--3/issues/1
 
 ### FR-06 Appointment Cancellation with FR-07 retained history
 
@@ -29,7 +29,7 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Scope: Implement only the Stage 6 appointment cancellation service workflow and focused tests. Do not delete appointments, directly change protected state, create replacement appointments, add notifications, add rescheduling or implement Stage 9 functionality.
 - Definition of Done: Cancellation uses the supplied Appointment.cancel() domain transition; object identity, CANCELLED status and retained history are demonstrated; successful and rejected operations are meaningfully tested; existing behaviour remains passing; another team member reviews the change; feedback is resolved; and the reviewed change is merged and verified on main.
 - Owner: Akshera Kandula — aksherakandula-git
-- Actual issue link: [response]
+- Actual issue link: https://github.com/aksherakandula-git/st1-assignment--3/issues/3
 
 ## B Commit quality
 | Original example | Strong or Weak | Reason |
@@ -74,21 +74,22 @@ GitHub Copilot says: "Looks good; tests pass."
 
 | Practice | Team agreement |
 |---|---|
-| Branch naming | [response] |
-| Commit message convention | [response] |
-| PR size | [response] |
-| Another-member review requirement | [response] |
-| Merge rule | [response] |
-| Significant Copilot disclosure rule | [response] |
+| Branch naming | Use focused branch names such as `feature/fr02-service-lookups` and `feature/fr06-cancellation`. |
+| Commit message convention | Use short, meaningful behaviour-focused messages such as `Add patient lookup by ID` or `Implement guarded appointment cancellation`. |
+| PR size | Keep each PR focused on one behaviour or closely related change. Unrelated refactoring, dependencies or features should be separated into another issue and PR. |
+| Another-member review requirement | A different group member must review each PR before merge. Self-review may be used as preparation but does not replace independent review. |
+| Merge rule | Merge only after the linked acceptance criteria are satisfied, focused and full tests pass, reviewer feedback is resolved and another group member has approved the PR. |
+| Significant Copilot disclosure rule | Record significant GitHub Copilot assistance, its purpose, the output considered, the human verification performed and whether the suggestion was accepted, modified or rejected. Do not claim Copilot ran tests unless the tests were independently executed and observed. |
 
 ## F Issue and backlog index
 
 Create at least two focused issues. Add a linked practitioner-lookup issue or an explicit supporting criterion with the tutor if needed to cover all three service targets.
 
 | Issue link | Requirement | Owner | Acceptance criteria or precise link | Status |
-|---|---|---|---|---|
-| [issue 1] | [response] | [response] | [response] | [response] |
-| [issue 2] | [response] | [response] | [response] | [response] |
+|--|---|---|---|---|
+| https://github.com/aksherakandula-git/st1-assignment--3/issues/1 | FR-02 Patient Search | Akshera Kandula — aksherakandula-git | Known valid ID returns the actual stored `Patient`; surrounding whitespace is trimmed; IDs remain case-sensitive; valid unknown ID raises `LookupError`; blank or invalid ID raises `ValueError`. | Open |
+| https://github.com/aksherakandula-git/st1-assignment--3/issues/2 | Supporting practitioner lookup for Stage 6 / FR-03 registered practitioners | Akshera Kandula — aksherakandula-git | Known valid ID returns the actual stored `Practitioner`; surrounding whitespace is trimmed; IDs remain case-sensitive; valid unknown ID raises `LookupError`; blank or invalid ID raises `ValueError`. | Open |
+| https://github.com/aksherakandula-git/st1-assignment--3/issues/3 | FR-06 Appointment Cancellation / FR-07 Retained History | Akshera Kandula — aksherakandula-git | A stored `SCHEDULED` appointment changes to `CANCELLED` using the domain transition, the same object is returned and retained, and illegal transitions or invalid/unknown IDs are rejected according to the contract. | Open |
 
 ## G Pull request evidence
 
