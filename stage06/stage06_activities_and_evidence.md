@@ -95,46 +95,46 @@ Create at least two focused issues. Add a linked practitioner-lookup issue or an
 
 Repeat this block per PR. Record actual events, not planned approvals.
 
-- PR link and title: [response]
-- Linked issue and requirement: [response]
-- Feature branch: [response]
-- Changed behaviour: [response]
-- Meaningful commits: [links]
-- Test command, directory and observed result: [response]
-- Another-member reviewer: [response]
-- Human observations recorded before Copilot: [link and time]
-- Requirement, responsibilities, test assertions and unrelated-scope checks: [response]
-- Key feedback: [response]
-- Author response/change and verification: [response]
-- Reviewer recheck and approval: [link]
-- Merge outcome and SHA: [response]
-- Significant Copilot assistance: [summary or none]
-- Linked issue closure: [response]
-- Each member updated main: [member and confirmation]
-- Integrated verification after merge: [command, directory, result and code SHA]
+- PR link and title: https://github.com/aksherakandula-git/st1-assignment--3/pull/4 — Complete Stage 6 service operations and tests
+- Linked issue and requirement: Issues #1, #2 and #3 — FR-02 Patient Search; supporting Stage 6 practitioner lookup over FR-03 registered practitioners; FR-06 Appointment Cancellation; FR-07 Retained Appointment History
+- Feature branch: `feature/fr02-service-lookups`
+- Changed behaviour: Implemented patient lookup, practitioner lookup and appointment cancellation. Lookups return the actual registered objects and distinguish invalid IDs from valid unknown IDs. Cancellation uses `Appointment.cancel()`, returns the same appointment object, changes `SCHEDULED` to `CANCELLED`, retains history and rejects illegal transitions without mutation.
+- Meaningful commits: Commit `e7c567f` — Complete Stage 6 service operations and tests
+- Test command, directory and observed result: From `project/`, ran `python3 -m pytest tests/test_services.py -v` and `python3 -m pytest`. Focused Stage 6 service tests passed and the full regression suite reported 19 passed.
+- Another-member reviewer: Harleen Partola — Harleenpartola
+- Human observations recorded before Copilot: Harleen reviewed PR #4 before the Copilot comparison and inspected the actual changed code and tests.
+- Requirement, responsibilities, test assertions and unrelated-scope checks: Human review confirmed that patient and practitioner lookup return the registered objects, appointment cancellation delegates to `Appointment.cancel()`, cancelled appointments remain stored, tests check identity/state/errors/state preservation, and no unrelated Stage 9 changes were identified.
+- Key feedback: Harleen found the implementation consistent with the Stage 6 requirements and responsibility boundaries. Her written review did not identify a specific code defect or required implementation change.
+- Author response/change and verification: No code change made at this point because the human review did not identify a concrete implementation defect. Existing focused and full regression results remain the current verification evidence.
+- Reviewer recheck and approval: Pending after Copilot comparison and final recheck.
+- Merge outcome and SHA: Pending.
+- Significant Copilot assistance: Pending required Copilot comparison.
+- Linked issue closure: Pending merge.
+- Each member updated main: Pending merge.
+- Integrated verification after merge: Pending merge.
 
 ## H Copilot collaboration record
 
 Record meaningful required use, not every trivial completion. Repeat per significant interaction.
 
-- Member and task: [response]
-- Prompt/purpose and relevant issue/diff: [response]
-- Summary of output: [response]
-- Human check against actual code, requirements and tests: [response]
-- Decision — Accept / Modify / Reject: [select]
-- Reason: [response]
-- Verification/evidence: [link and result]
+- Member and task:  Akshera Kandula — Copilot review of Stage 6 PR #4
+- Prompt/purpose and relevant issue/diff: Review PR #4 against FR-02 Patient Search, the supporting practitioner lookup contract, FR-06 Appointment Cancellation and FR-07 Retained History. Check correctness, SmartCare responsibility boundaries, assertion quality, error handling, unrelated scope and maintainability.
+- Summary of output: The copilot review found no critical or important correctness defect. It confirmed that lookups return the stored objects, cancellation delegates to `Appointment.cancel()`, cancelled history is retained, meaningful assertions are present and no unrelated Stage 9 work was identified. It raised only an optional maintainability observation that the completed lookup docstrings still contain starter/TODO wording.
+- Human check against actual code, requirements and tests: I checked the copilot comments against the actual PR diff, the Stage 6 contracts, Harleen's independent human review and the observed test results. The implementation matches the required behaviour and the optional docstring observation does not affect the published Stage 6 behaviour.
+- Decision — Accept / Modify / Reject: Accept
+- Reason: The copilot review was consistent with the actual implementation and human review. No functional defect requiring a production-code change was identified. The optional documentation observation was noted but is not required to satisfy the Stage 6 acceptance criteria.
+- Verification/evidence: PR #4 — https://github.com/aksherakandula-git/st1-assignment--3/pull/4. Focused Stage 6 service tests passed and the full regression suite reported 19 passed.
 
 ## I Human versus Copilot review comparison
 
-- Human reviewer noticed before consulting Copilot: [response]
-- Copilot noticed: [response]
-- Overlap: [response]
-- What did the human reviewer notice that Copilot did not: [response]
-- What did Copilot identify that the human reviewer initially missed: [response]
-- Unsupported or incorrect Copilot suggestion: [response or none identified with explanation]
-- Human judgement accepted, modified or rejected, and why: [response]
-- Which evidence justified merge approval: [response]
+- Human reviewer noticed before consulting Copilot: Harleen independently verified that patient and practitioner lookup return the stored registered objects, unknown IDs are handled correctly, appointment cancellation uses `Appointment.cancel()`, cancelled appointments remain in the data store, tests cover object identity, state transitions, exception handling and unchanged state after rejected operations, and no unrelated Stage 9 changes were present.
+- Copilot noticed: The tutor-approved AI review reached the same overall conclusion. It found no critical or important correctness issue, confirmed the service/domain responsibility boundaries and meaningful test assertions, and additionally noted an optional maintainability issue that the completed lookup docstrings still contain starter/TODO wording.
+- Overlap: Both reviews agreed that the lookup operations preserve registered-object identity, cancellation correctly delegates to the domain transition, retained history is preserved, the tests meaningfully verify the required behaviour and no unrelated Stage 9 work was introduced.
+- What did the human reviewer notice that Copilot did not: The human review directly inspected the actual changed lines in GitHub and specifically confirmed the implemented patient, practitioner and cancellation changes against the PR diff.
+- What did Copilot identify that the human reviewer initially missed: The AI review identified the optional maintainability concern that the lookup docstrings still contain starter/TODO wording even though the methods are now implemented.
+- Unsupported or incorrect Copilot suggestion: None identified. The optional docstring observation was valid but was not a requirement-level defect.
+- Human judgement accepted, modified or rejected, and why: The AI review was accepted as supporting evidence because its conclusions matched the actual code, published requirements, Harleen's independent review and the observed tests. No production-code change was required from the AI review.
+- Which evidence justified merge approval: The linked requirements and acceptance criteria, the actual PR diff, Harleen's independent review, meaningful identity/state/error assertions, focused Stage 6 service tests and the full regression suite reporting 19 passed.
 
 ## J Contributions
 
