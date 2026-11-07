@@ -269,7 +269,7 @@ Run python -m pytest from project/. Retain all accumulated tests. Record the tes
 
 - Working directory: `project/`
 - Full-suite command: `python3 -m pytest`
-- Tested SHA: b7ae8f301cc00cf12657a7910b3d8169da95b840
+- Tested SHA: `e4e7705349d7fce4ffab8209ae25c4080032cd00`
 - Passed count: 38
 - Failed count: 0
 - Errors: 0
@@ -307,11 +307,11 @@ Use links rather than copying GitHub history. Continue the Stage 6 workflow; no 
 - Full regression result before review: 38 passed
 - Review focus: Requirement-to-test traceability, meaningful assertions, positive/negative/boundary coverage, independent test setup, supplied versus student-authored evidence and avoidance of invented SmartCare behaviour.
 - Reviewer feedback: Harleen requested a final tidy-up of the Stage 7 evidence document. She identified remaining template placeholders such as `[complete]` and `[response]`, duplicate Group/tutorial entries, an unused Activity 1 template table, leftover Activity 2 placeholders, empty Activity 4 candidate rows, a duplicate/empty Service Test Evidence table and heading, and other unused template content.
-- Author response/change: The requested evidence-document cleanup is being completed on the same `feature/stage7-testing` branch by removing unused placeholders, duplicate headings/tables and template-only content while retaining the completed Stage 7 evidence.
-- Verification after change: The production code and tests are unchanged by the evidence cleanup. The regression suite previously reported 38 passed; the full suite will be rerun after the tidy-up before requesting reviewer recheck.
-- Reviewer recheck: Pending after evidence tidy-up is pushed.
-- Review outcome: Pending.
-- Merge outcome: Pending.
+- Author response/change: Removed the remaining template placeholders, duplicate headings/tables and unused template content on the same `feature/stage7-testing` branch, then pushed the updated evidence for reviewer recheck.
+- Verification after change: Reran the full regression suite after the evidence tidy-up. From `project/`, `python3 -m pytest` reported 38 passed.
+- Reviewer recheck: Harleen Partola rechecked PR #7 after the requested evidence tidy-up.
+- Review outcome: Approved by Harleen Partola after confirming the requested cleanup was completed.
+- Merge outcome: PR #7 was merged into `main`.
 
 ## M Contribution Evidence
 
@@ -336,7 +336,7 @@ Record actual work in test design, implementation, review, traceability, diagnos
 - Review: Reviewed PR #7 and checked the Stage 7 tests and evidence for requirement traceability, assertion quality, independent setup and scope.
 - Documentation review: Identified remaining template placeholders, duplicate headings/tables and unused template content in the Stage 7 evidence document and requested a final tidy-up.
 - Team support: Provided independent review feedback before Stage 7 integration.
-- Final review/integration: Pending recheck and approval after the requested evidence-document tidy-up.
+- Final review/integration: Rechecked PR #7 after the evidence tidy-up and approved the Stage 7 changes for integration.
 
 ## N Formative Questions
 
@@ -372,9 +372,14 @@ The Stage 7 engineering rule is to ask what required behaviour each test actuall
 
 ## O Stage Completion
 
-Tested Stage 7 main SHA: [complete]
-Full-suite result: [complete]
-Unresolved defects and effect on baseline: [complete or none]
-Clean working tree and integration evidence: [complete]
-Stage 8 handover status: [complete; no Stage 8 work assigned]
-All tutorial/formative responses and traceability/Copilot decisions complete: [confirm]
+- Integrated branch: `main`
+- Tested main SHA: `e4e7705349d7fce4ffab8209ae25c4080032cd00`
+- Working directory: `project/`
+- Full-suite command: `python3 -m pytest`
+- Final integrated result: 38 passed, 0 failed, 0 errors.
+- Review status: PR #7 was reviewed and approved by Harleen Partola after the requested Stage 7 evidence tidy-up was completed.
+- Integration status: PR #7 was merged into `main`.
+- Production-code changes in Stage 7: None. Stage 7 added and extended verification tests and completed the associated evidence record.
+- Unresolved Stage 7 product defects: None identified by the completed Stage 7 regression suite.
+- Known limits: The suite provides evidence only for the requirements and scenarios exercised by the retained tests. It does not establish correctness of later Stage 8/9 functionality or unstated behaviours.
+- Handover status: Stage 7 is integrated on `main` with the accumulated Stage 6 and Stage 7 regression suite passing. The tested baseline is ready to continue to Stage 8.
