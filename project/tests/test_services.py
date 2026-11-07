@@ -159,3 +159,87 @@ def test_cancel_rejects_blank_appointment_id():
 
     with pytest.raises(ValueError):
         appointments.cancel_appointment("   ")
+def test_register_patient_stores_same_object():
+    data_store, patients, _, _ = make_services()
+    patient = patients.register_patient("P2", "Taylor Example")
+
+    assert data_store.find_patient("P2") is patient
+
+
+def test_duplicate_patient_preserves_original_stage7():
+    data_store, patients, _, _ = make_services()
+    original = patients.register_patient("P1", "Alex Example")
+
+    with pytest.raises(ValueError):
+        patients.register_patient("P1", "Replacement Example")
+
+    assert data_store.find_patient("P1") is original
+    assert original.name == "Alex Example"
+
+
+def test_find_patient_unknown_id_reports_absence():
+    _, patients, _, _ = make_services()
+
+    with pytest.raises(LookupError):
+        patients.find_patient("P999")
+
+
+def test_known_appointment_lookup_returns_same_object():
+    _, patients, practitioners, appointments = make_services()
+    register_participants(patients, practitioners)
+
+    appointment = appointments.book_appointment(
+        "A1",
+        "P1",
+        "DR1",
+        datetime(2026, 10, 2, 10, 0),
+    )
+
+    result = appointments.find_appointment("A1")
+
+    assert result is appointment
+
+
+def test_unknown_participant_booking_leaves_no_appointment():
+    data_store, _, practitioners, appointments = make_services()
+    practitioners.register_practitioner(
+        "DR1",
+        "Dana Example",
+        "General Practice",
+    )
+
+    with pytest.raises(LookupError):
+        appointments.book_appointment(
+            "A1",
+            "P999",
+            "DR1",
+            datetime(2026, 10, 2, 10, 0),
+        )
+
+    assert data_store.find_appointment("A1") is None
+
+
+def test_cancelled_appointment_does_not_block_same_practitioner_time():
+    data_store, patients, practitioners, appointments = make_services()
+    register_participants(patients, practitioners)
+    when = datetime(2026, 10, 2, 10, 0)
+
+    first = appointments.book_appointment(
+        "A1",
+        "P1",
+        "DR1",
+        when,
+    )
+
+    appointments.cancel_appointment("A1")
+
+    second = appointments.book_appointment(
+        "A2",
+        "P1",
+        "DR1",
+        when,
+    )
+
+    assert first.status is AppointmentStatus.CANCELLED
+    assert second.status is AppointmentStatus.SCHEDULED
+    assert data_store.find_appointment("A2") is second
