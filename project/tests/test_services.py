@@ -74,79 +74,88 @@ def test_find_practitioner_rejects_blank_id():
     with pytest.raises(ValueError):
         practitioners.find_practitioner("   ")
 
-        def register_participants(patients, practitioners):
-            patient = patients.register_patient("P1", "Alex Example")
-            practitioner = practitioners.register_practitioner(
-                "DR1",
-                "Dana Example",
-                "General Practice",
-            )
-            return patient, practitioner
 
-        def test_cancel_returns_same_object_and_retains_cancelled_history():
-            data_store, patients, practitioners, appointments = make_services()
-            register_participants(patients, practitioners)
+def register_participants(patients, practitioners):
+    patient = patients.register_patient("P1", "Alex Example")
+    practitioner = practitioners.register_practitioner(
+        "DR1",
+        "Dana Example",
+        "General Practice",
+    )
+    return patient, practitioner
 
-            appointment = appointments.book_appointment(
-                "A1",
-                "P1",
-                "DR1",
-                datetime(2026, 10, 1, 9, 0),
-            )
 
-            result = appointments.cancel_appointment("  A1  ")
+def test_cancel_returns_same_object_and_retains_cancelled_history():
+    data_store, patients, practitioners, appointments = make_services()
+    register_participants(patients, practitioners)
 
-            assert result is appointment
-            assert appointment.status is AppointmentStatus.CANCELLED
-            assert data_store.find_appointment("A1") is appointment
+    appointment = appointments.book_appointment(
+        "A1",
+        "P1",
+        "DR1",
+        datetime(2026, 10, 1, 9, 0),
+    )
 
-        def test_repeated_cancellation_is_rejected_without_state_change():
-            data_store, patients, practitioners, appointments = make_services()
-            register_participants(patients, practitioners)
+    result = appointments.cancel_appointment("  A1  ")
 
-            appointment = appointments.book_appointment(
-                "A1",
-                "P1",
-                "DR1",
-                datetime(2026, 10, 1, 9, 0),
-            )
+    assert result is appointment
+    assert appointment.status is AppointmentStatus.CANCELLED
+    assert data_store.find_appointment("A1") is appointment
 
-            appointments.cancel_appointment("A1")
 
-            with pytest.raises(ValueError):
-                appointments.cancel_appointment("A1")
+def test_repeated_cancellation_is_rejected_without_state_change():
+    data_store, patients, practitioners, appointments = make_services()
+    register_participants(patients, practitioners)
 
-            assert appointment.status is AppointmentStatus.CANCELLED
-            assert data_store.find_appointment("A1") is appointment
+    appointment = appointments.book_appointment(
+        "A1",
+        "P1",
+        "DR1",
+        datetime(2026, 10, 1, 9, 0),
+    )
 
-        def test_completed_appointment_cannot_be_cancelled_or_mutated():
-            data_store, patients, practitioners, appointments = make_services()
-            patient, practitioner = register_participants(patients, practitioners)
+    appointments.cancel_appointment("A1")
 
-            appointment = Appointment(
-                "A1",
-                patient,
-                practitioner,
-                datetime(2026, 10, 1, 9, 0),
-                AppointmentStatus.COMPLETED,
-            )
+    with pytest.raises(ValueError):
+        appointments.cancel_appointment("A1")
 
-            data_store.add_appointment(appointment)
+    assert appointment.status is AppointmentStatus.CANCELLED
+    assert data_store.find_appointment("A1") is appointment
 
-            with pytest.raises(ValueError):
-                appointments.cancel_appointment("A1")
 
-            assert appointment.status is AppointmentStatus.COMPLETED
-            assert data_store.find_appointment("A1") is appointment
+def test_completed_appointment_cannot_be_cancelled_or_mutated():
+    data_store, patients, practitioners, appointments = make_services()
+    patient, practitioner = register_participants(
+        patients,
+        practitioners,
+    )
 
-        def test_cancel_unknown_appointment_reports_absence():
-            _, _, _, appointments = make_services()
+    appointment = Appointment(
+        "A1",
+        patient,
+        practitioner,
+        datetime(2026, 10, 1, 9, 0),
+        AppointmentStatus.COMPLETED,
+    )
 
-            with pytest.raises(LookupError):
-                appointments.cancel_appointment("A999")
+    data_store.add_appointment(appointment)
 
-        def test_cancel_rejects_blank_appointment_id():
-            _, _, _, appointments = make_services()
+    with pytest.raises(ValueError):
+        appointments.cancel_appointment("A1")
 
-            with pytest.raises(ValueError):
-                appointments.cancel_appointment("   ")
+    assert appointment.status is AppointmentStatus.COMPLETED
+    assert data_store.find_appointment("A1") is appointment
+
+
+def test_cancel_unknown_appointment_reports_absence():
+    _, _, _, appointments = make_services()
+
+    with pytest.raises(LookupError):
+        appointments.cancel_appointment("A999")
+
+
+def test_cancel_rejects_blank_appointment_id():
+    _, _, _, appointments = make_services()
+
+    with pytest.raises(ValueError):
+        appointments.cancel_appointment("   ")
