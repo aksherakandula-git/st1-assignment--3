@@ -138,64 +138,75 @@ Record meaningful required use, not every trivial completion. Repeat per signifi
 
 ## J Contributions
 
-Repeat per member. Include only categories that describe actual work; write not applicable where appropriate. Pairing or mentoring can be supported by a short corroborated note.
+### Akshera Kandula
 
-- Member: [response]
-- Implementation: [work and evidence]
-- Testing: [work and evidence]
-- Review: [work and evidence]
-- Issue refinement: [work and evidence]
-- Design and responsibility discussion: [work and evidence]
-- Debugging or integration: [work and evidence]
-- Documentation or team support: [work and evidence]
+- Member: Akshera Kandula — `aksherakandula-git`
+- Implementation: Implemented the three Stage 6 service operations in `project/smartcare/services.py`: patient lookup, practitioner lookup and appointment cancellation. The lookup services use the existing `SmartCareDataStore`, while cancellation delegates the state transition to `Appointment.cancel()`.
+- Testing: Created and developed `project/tests/test_services.py`. Added lookup tests for registered-object identity, trimming, case sensitivity, unknown IDs and invalid IDs. Added cancellation tests for same-object return, `CANCELLED` status, retained history, repeated cancellation, `COMPLETED` cancellation, unknown IDs and blank IDs. Final integrated regression suite reported 19 passed.
+- Review: Prepared PR #4 and PR #5 for another-member review, responded to the review process and verified the reviewed changes before integration.
+- Issue refinement: Created and documented GitHub Issues #1, #2 and #3 with requirements, acceptance criteria, scope and Definition of Done for patient lookup, practitioner lookup and appointment cancellation/retained history.
+- Design and responsibility discussion: Preserved the supplied SmartCare responsibility boundaries by keeping storage and lookup behaviour in `SmartCareDataStore`, workflow coordination in services and appointment state transitions in the `Appointment` domain object.
+- Debugging or integration: Identified that cancellation tests were initially not collected because they were incorrectly nested. Corrected the test structure, reran the focused and full suites, added the cancellation regression-test PR and verified the final integrated result on `main`.
+- Documentation or team support: Completed the Stage 6 activity/evidence record, documented the human-versus-Copilot review comparison and coordinated the final review and verification steps with Harleen.
+
+### Harleen Partola
+
+- Member: Harleen Partola — `Harleenpartola`
+- Implementation: Not applicable for the Stage 6 implementation owned by Akshera.
+- Testing: Reviewed the Stage 6 test changes, including identity, cancellation state, exception handling and state-preservation checks. Final independent `main` verification will be recorded in Section M when completed.
+- Review: Independently reviewed the actual PR #4 diff before the Copilot comparison, checking the patient and practitioner lookup implementations, `Appointment.cancel()` usage, retained history, assertion quality, exception handling and unrelated scope. Also reviewed and approved the follow-up cancellation regression-test PR #5.
+- Issue refinement: Not applicable.
+- Design and responsibility discussion: Confirmed during review that the implementation preserves the existing service/domain responsibility boundaries and does not introduce unrelated Stage 9 functionality.
+- Debugging or integration: Supported integration by reviewing the corrected Stage 6 changes before merge.
+- Documentation or team support: Provided independent human review evidence and approval required for Stage 6 integration.
 
 ## K Exit question
 
 Why is a high commit count not necessarily evidence of strong contribution?
 
-[response]
+A high commit count does not necessarily show strong contribution because commits can be very small, repetitive or poorly scoped. One coherent commit can represent substantial implementation and testing work, while another team member may contribute through requirement analysis, debugging, code review, testing, integration or team support without producing many commits. Contribution should therefore be judged by the quality, relevance and verified impact of the work rather than the number of commits alone.
 
 ## L Stage 6 formative questions
 
-1. What is version control?
+### 1. What is version control?
 
-[response]
+Version control is a system for recording and managing changes to project files over time. It allows a team to track who changed what, return to earlier versions and collaborate on the same project while preserving a history of the work.
 
-2. Why is a feature branch useful?
+### 2. Why is a feature branch useful?
 
-[response]
+A feature branch allows a focused change to be developed separately from the stable `main` branch. This lets the developer implement and test the change without disrupting integrated working code, and the branch can then be reviewed through a pull request before merging.
 
-3. What makes a commit a good engineering commit?
+### 3. What makes a commit a good engineering commit?
 
-[response]
+A good engineering commit contains one coherent and meaningful change and has a message that clearly explains the behaviour or purpose of that change. It should avoid unrelated modifications and leave useful history for reviewers and future developers.
 
-4. What is a pull request?
+### 4. What is a pull request?
 
-[response]
+A pull request proposes integrating changes from one branch into another, usually into `main`. It exposes the diff so another team member can review the implementation, requirements, tests, scope and code quality before the change is merged.
 
-5. What is the purpose of code review?
+### 5. What is the purpose of code review?
 
-[response]
+Code review provides an independent check of a proposed change before integration. It can identify defects, weak tests, responsibility violations, unrelated changes or maintainability concerns and helps confirm that the implementation satisfies its requirement and acceptance criteria.
 
-6. What does a Git diff show?
+### 6. What does a Git diff show?
 
-[response]
+A Git diff shows the changes between two versions of files, such as lines that were added, removed or modified. It allows a reviewer to inspect exactly what a branch or commit changes rather than reviewing the whole project again.
 
-7. What is a Definition of Done?
+### 7. What is a Definition of Done?
 
-[response]
+A Definition of Done is the shared set of conditions that must be satisfied before work is considered complete. In Stage 6, this goes beyond writing code and includes meeting the requirement, meaningful testing, human review, resolving feedback, integration and appropriate evidence/documentation.
 
-8. What is the appropriate role of GitHub Copilot in pull-request review?
+### 8. What is the appropriate role of GitHub Copilot in pull-request review?
 
-[response]
+Copilot can assist by identifying possible correctness risks, weak tests, responsibility issues, unrelated changes or maintainability concerns. Its output is supporting evidence only. A human must independently review the actual diff first, verify Copilot's suggestions against the requirements, code and observed tests, and decide whether to accept, modify or reject them.
 
-9. Why should individual contribution not be judged only by commit count?
+### 9. Why should individual contribution not be judged only by commit count?
 
-[response]
+Commit count does not measure the difficulty or quality of work. Important contribution can include implementation, test design, debugging, reviewing another member's code, refining requirements, integration, documentation and mentoring. Contribution should be based on observable engineering value and follow-through rather than a raw number of commits.
 
-10. What is the Stage 6 engineering rule?
+### 10. What is the Stage 6 engineering rule?
 
-[response]
+The Stage 6 engineering rule is to take a requirement through a focused and reviewable engineering workflow: link it to an issue and observable acceptance criteria, develop it on a focused branch, implement only the required behaviour, verify it with meaningful tests, obtain independent human review, resolve feedback and integrate the verified change into stable `main` while preserving the supplied responsibility boundaries.
 
 ## M Completion and handover
 
