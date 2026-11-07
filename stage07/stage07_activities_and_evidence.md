@@ -3,7 +3,7 @@
 Group/tutorial: 4483 Software Technology 1 – Online Group 3, Tuesday 5:30–7:30 pm
 Members/cohorts: Akshera Kandula – aksherakandula-git – UG; Harleen Partola – Harleenpartola – UG
 Requirements baseline: SmartCare A3 Requirements Baseline 2026, revision 2.
-Use the same project/. Link actual evidence; keep responses concise. Blank fields are for your group. Copy rows only as needed.
+
 
 All Assignment 3 stage materials are provided from the beginning. Complete this stage only after the previous applicable stage has been integrated, verified and recorded. Use this supplied record in stage07/ in your EXISTING repository. Preserve project/, all earlier tests, records and responses. Do not download another starter or copy staff solutions.
 
@@ -169,8 +169,6 @@ Cover Patient/Practitioner construction and validation; Appointment construction
 
 Use fresh shared SmartCareDataStore state, registered objects and completed Stage 6 services.
 
-## F Service Test Evidence
-
 | Test ID | Behaviour | Test file/function | Result |
 |---|---|---|---|
 | TEST-S7-01 | Valid patient registration stores and returns the same registered patient object. | `tests/test_services.py::test_register_patient_stores_same_object` | Passed |
@@ -300,49 +298,77 @@ Optional fixtures/parametrisation used and why, if any: Not used. The tests use 
 
 Use links rather than copying GitHub history. Continue the Stage 6 workflow; no commit/PR count, conflict or individual test quota is imposed.
 
-| Issue/task | Branch | PR | Reviewer | Key feedback | Outcome |
-|---|---|---|---|---|---|
-| [complete] | [complete] | [complete] | [complete] | [complete] | [complete] |
+- Issue/task: Stage 7 requirement-linked domain and service testing — GitHub Issue #6
+- Issue link: https://github.com/aksherakandula-git/st1-assignment--3/issues/6
+- Branch: `feature/stage7-testing`
+- PR link: https://github.com/aksherakandula-git/st1-assignment--3/pull/7
+- PR title: Add Stage 7 requirement-linked tests
+- Reviewer: Harleen Partola (`Harleenpartola`)
+- Full regression result before review: 38 passed
+- Review focus: Requirement-to-test traceability, meaningful assertions, positive/negative/boundary coverage, independent test setup, supplied versus student-authored evidence and avoidance of invented SmartCare behaviour.
+- Reviewer feedback: Harleen requested a final tidy-up of the Stage 7 evidence document. She identified remaining template placeholders such as `[complete]` and `[response]`, duplicate Group/tutorial entries, an unused Activity 1 template table, leftover Activity 2 placeholders, empty Activity 4 candidate rows, a duplicate/empty Service Test Evidence table and heading, and other unused template content.
+- Author response/change: The requested evidence-document cleanup is being completed on the same `feature/stage7-testing` branch by removing unused placeholders, duplicate headings/tables and template-only content while retaining the completed Stage 7 evidence.
+- Verification after change: The production code and tests are unchanged by the evidence cleanup. The regression suite previously reported 38 passed; the full suite will be rerun after the tidy-up before requesting reviewer recheck.
+- Reviewer recheck: Pending after evidence tidy-up is pushed.
+- Review outcome: Pending.
+- Merge outcome: Pending.
 
 ## M Contribution Evidence
 
 Record actual work in test design, implementation, review, traceability, diagnosis, necessary fixes and integration. Do not include confidential peer ratings.
 
-| Member | Actual contribution | Evidence link |
-|---|---|---|
-| [complete] | [complete] | [complete] |
+### Akshera Kandula
+
+- Member: Akshera Kandula — `aksherakandula-git`
+- Test design: Designed requirement-linked positive, negative and boundary cases for FR-01, FR-02, FR-04, FR-05, FR-06, FR-07 and FR-08.
+- Domain testing: Created `project/tests/test_domain.py` covering Patient and Practitioner validation, Appointment construction, initial state and guarded cancellation.
+- Service testing: Extended `project/tests/test_services.py` with additional evidence for registration, duplicate preservation, lookup, booking rejection, appointment lookup and cancelled-slot reuse.
+- Traceability: Assigned TEST IDs and linked tests to the relevant functional requirements, acceptance criteria and revision 2 validation contracts.
+- Copilot/test-assistant critique: Used human-first test design, evaluated candidate tests, accepted requirement-linked candidates, modified incorrectly traced candidates and rejected the invented 30-minute overlap rule.
+- Regression verification: Ran the focused and full pytest suites. The Stage 7 branch regression suite reported 38 passed.
+- Diagnosis/setup: Identified that an early `test_domain.py` command failed because pytest was run from the repository root rather than `project/`; corrected the working directory and reran successfully.
+- Git/integration: Created the Stage 7 issue, worked on `feature/stage7-testing`, committed and pushed the testing changes and opened PR #7 for another-member review.
+- Documentation: Completed the Stage 7 requirement-to-test matrix, test-design reasoning, evidence tables and regression record.
+
+### Harleen Partola
+
+- Member: Harleen Partola — `Harleenpartola`
+- Review: Reviewed PR #7 and checked the Stage 7 tests and evidence for requirement traceability, assertion quality, independent setup and scope.
+- Documentation review: Identified remaining template placeholders, duplicate headings/tables and unused template content in the Stage 7 evidence document and requested a final tidy-up.
+- Team support: Provided independent review feedback before Stage 7 integration.
+- Final review/integration: Pending recheck and approval after the requested evidence-document tidy-up.
 
 ## N Formative Questions
 
-1. What question does verification answer?
-[response]
+1. What question does verification answer?  
+Verification asks whether the implementation meets the specified requirements and behaves as the approved contract says it should.
 
-2. What question does validation answer?
-[response]
+2. What question does validation answer?  
+Validation asks whether the specified product or requirement actually meets the intended user or business need.
 
-3. What is a unit test?
-[response]
+3. What is a unit test?  
+A unit test checks a small, focused unit of behaviour in isolation, such as a domain object's validation rule or state transition, using known inputs and meaningful assertions.
 
-4. What is a pytest fixture?
-[response]
+4. What is a pytest fixture?  
+A pytest fixture is reusable setup that prepares data or objects for tests. It can help provide fresh, consistent test state without repeating the same setup code in every test.
 
-5. What is parametrisation in pytest?
-[response]
+5. What is parametrisation in pytest?  
+Parametrisation lets the same test logic run with several meaningful input and expected-output combinations, reducing duplication while still checking distinct cases.
 
-6. What is regression testing?
-[response]
+6. What is regression testing?  
+Regression testing reruns previously useful tests after changes to confirm that earlier required behaviour still works and that new work has not broken existing functionality.
 
-7. What does code coverage tell us, and what does it not prove?
-[response]
+7. What does code coverage tell us, and what does it not prove?  
+Code coverage shows which code was executed by the tests. It can help identify untested areas, but it does not prove that requirements are correct, assertions are meaningful, important boundaries are covered or the whole program is correct.
 
-8. What makes an assertion weak?
-[response]
+8. What makes an assertion weak?  
+An assertion is weak when it does not directly check the required observable behaviour or could still pass while the requirement is broken. Examples include `assert True`, `is not None` when identity matters, or checking only that a result list is non-empty when exact contents matter.
 
-9. What is the appropriate role of GitHub Copilot as a test assistant?
-[response]
+9. What is the appropriate role of GitHub Copilot as a test assistant?  
+Copilot can suggest candidate tests, edge cases and review questions, but a human must check every suggestion against the real requirement and public contract. Generated tests should be accepted, modified or rejected based on traceability, assertion quality and whether they invent any behaviour.
 
-10. What is the Stage 7 engineering rule?
-[response]
+10. What is the Stage 7 engineering rule?  
+The Stage 7 engineering rule is to ask what required behaviour each test actually proves: derive the expectation from the approved requirement, use meaningful and independent assertions, run focused and full regression tests, interpret failures against the contract, and retain traceable evidence for the verified result.
 
 ## O Stage Completion
 
