@@ -113,6 +113,22 @@ Repeat this block per PR. Record actual events, not planned approvals.
 - Each member updated main: Pending merge.
 - Integrated verification after merge: Pending merge.
 
+### PR #5 — Cancellation regression tests
+
+- PR link and title: https://github.com/aksherakandula-git/st1-assignment--3/pull/5 — Add Stage 6 cancellation regression tests
+- Linked issue and requirement: Follow-up verification evidence for FR-06 Appointment Cancellation and FR-07 Retained Appointment History
+- Feature branch: `test/stage6-cancellation`
+- Changed behaviour: No production behaviour changed. Added the missing cancellation regression tests so pytest independently collects and verifies cancellation identity, state, retained history and rejection behaviour.
+- Meaningful commits: `Add Stage 6 cancellation regression tests`
+- Test command, directory and observed result: From `project/`, ran `python3 -m pytest`; 19 passed.
+- Another-member reviewer: Harleen Partola — `Harleenpartola`
+- Key feedback: The added tests were reviewed for the required cancellation behaviours.
+- Author response/change and verification: Corrected the test structure so the cancellation tests were independently collected by pytest, then reran the full suite successfully.
+- Reviewer recheck and approval: Harleen Partola reviewed and approved PR #5.
+- Merge outcome and SHA: Merged into `main`; final verified Stage 6 SHA `a24e53aeb0a908c4a426c481185f8b83bb540c6c`.
+- Significant Copilot assistance: Copilot comparison and human judgement recorded in Sections H and I.
+- Integrated verification after merge: Akshera Kandula — 19 passed; Harleen Partola — 19 passed.
+
 ## H Copilot collaboration record
 
 Record meaningful required use, not every trivial completion. Repeat per significant interaction.
@@ -210,15 +226,16 @@ The Stage 6 engineering rule is to take a requirement through a focused and revi
 
 ## M Completion and handover
 
-- Starting SHA: [response]
-- Final Stage 6 code SHA: [response]
-- Test command: [response]
-- Working directory: [response]
-- Observed result: [response]
-- PR and another-member reviewer: [links]
-- Unresolved issue or none: [response]
-- Stage 7 handover status: [ready for tutor checkpoint / unresolved work]
-- Final submitted SHA if later than tested SHA: [response and evidence-only difference]
+- Starting SHA: db5f939e1ca707e4cbe5cce43d4127da61f705f
+- Final Stage 6 code SHA: a24e53aeb0a908c4a426c481185f8b83bb540c6c
+- Test command: `python3 -m pytest`
+- Working directory: `project/`
+- Observed result: 19 passed
+- PR and another-member reviewer: PR #4 and PR #5 were reviewed and approved by Harleen Partola (`Harleenpartola`).
+- Each member updated main: Akshera Kandula — confirmed; Harleen Partola — confirmed.
+- Integrated verification after merge: Akshera Kandula — `python3 -m pytest` from `project/`, 19 passed. Harleen Partola — updated merged `main` and ran `python3 -m pytest`, 19 passed.
+- Unresolved Stage 6 work: None identified.
+- Handover status: Stage 6 implementation, testing, review, integration and evidence are complete. The verified application and accumulated regression tests are ready to continue into Stage 7.
 
 - [ ] Three Stage 6 service targets completed and checked.
 - [ ] Original supplied tests retained and passing.
