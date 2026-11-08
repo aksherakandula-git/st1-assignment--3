@@ -4,9 +4,9 @@ UG and PG | One evolving group project | Complete this blank record using the St
 
 All Assignment 3 stage materials are provided from the beginning. Complete this stage only after the previous applicable stage has been integrated, verified and recorded. Use this supplied record in stage08/ in your EXISTING repository. Preserve project/, all earlier tests, records and responses. Do not download another starter or copy staff solutions. The Stage 8 preparation utility is supplied or run by teaching staff when Stage 8 begins. Follow your tutor’s controlled workflow and the handout. If temporarily supplied, keep it outside the repository in a sibling Stage_8_Assets/ folder; exclude it from Git and the final submission.
 
-Group/tutorial: [complete]
-Members and UG/PG cohorts: [complete]
-Record owner / contribution links for each member: [complete]
+Group/tutorial: Online group 3
+Members and UG/PG cohorts: Harleen Partola, Akshera Kandula 
+Record owner / contribution links for each member: Akshera Kandula (UG) – 
 
 Use concise results and accessible artefact links rather than copying entire logs. Keep human-first entries before consulting GitHub Copilot. Link shared evidence once; do not repeat it across sections. No entries below are specimen answers or claimed results.
 
@@ -21,17 +21,41 @@ For each, choose symptom, evidence or hypothesis/opinion, and explain your reaso
 - Traceback points to smartcare/services.py line 42 in the example.
 The example line number is illustrative; inspect the actual line in your run. The removal hypothesis must be tested against the current project, which has no public delete operation.
 
-Response and reason: [complete]
+
+Response and reason: Statement	Classification	Explanation
+1. Appointment disappears after cancellation.	Symptom	This describes the problem that was observed when a cancelled appointment could no longer be found.
+2. The data-store removal path is probably being called.	Hypothesis	This is a possible explanation for the problem, but it needs to be checked against the actual code.
+3. The failing test shows store.find_appointment('A1') returns None.	Evidence	This is an actual test observation showing that the appointment could not be retrieved.
+4. The service layer is badly designed.	Opinion	This is a personal judgement about the code. It does not provide specific evidence of what is wrong.
+5. Traceback points to smartcare/services.py line 42 in the example.	Evidence	A traceback provides information about where an error occurred. However, it does not automatically prove the root cause.
+
+A symptom describes what is going wrong, evidence provides information that can be checked, and a hypothesis suggests a possible reason for the problem. An opinion is a personal judgement and needs supporting evidence before it can be treated as a technical conclusion. During debugging, hypotheses should be tested against the actual code and test results before making changes.
+
 
 ### A.2 Build a debugging record
 Choose the cancelled-history scenario or a same-practitioner/time booking. Before changing code, record expected behaviour, observed behaviour, minimal reproduction, a hypothesis and evidence to inspect. Use a requirement to justify the expectation. Keep the initial hypothesis even if later evidence disproves it.
 
-Response and reason: [complete]
+Response and reason: 
+Scenario: Cancelled appointment history.
+
+Expected behaviour: After cancellation, the appointment should remain stored and retrievable, with its status changed to cancelled.
+
+Observed behaviour: Searching for the cancelled appointment returned None. Attempting to cancel it again raised LookupError instead of ValueError.
+
+Minimal reproduction: Register a patient and practitioner, book appointment A1, cancel A1, search for A1 and attempt to cancel it again.
+
+Initial hypothesis: The find_appointment() method in data_store.py may be excluding cancelled appointments.
+
+Evidence to inspect: The appointment collection, the status condition in find_appointment(), and the cancellation service method.
+
+Requirement: FR-07 requires cancelled appointment history to be retained.
 
 ### A.3 Test defect or product defect
 A test expects cancelled appointments to be deleted, but FR-07 says history must be retained. What should be changed? Explain why. Also decide whether a test expecting different practitioners at the same time to conflict reflects AC-04.2. Do not assume every failing test is correct.
 
-Response and reason: [complete]
+Response and reason: The test expecting cancelled appointments to be deleted should be changed because it conflicts with FR-07, which requires cancellation history to be retained. A test should check the required behaviour rather than force the application to behave incorrectly.
+
+A test expecting two different practitioners to conflict at the same time would also be incorrect if AC-04.2 only prevents overlapping appointments for the same practitioner. The conflict check should apply to the same practitioner, not every practitioner.
 
 ### A.4 Refactoring smell hunt
 **Response and reason:**
@@ -53,12 +77,30 @@ The main behaviour to preserve is appointment booking, cancellation, status tran
 ### A.5 Traceback and hypothesis ranking
 Using one actual failure, identify its exception/assertion, expected and observed values, test line, application call path and supporting requirement. List three plausible causes and rank them by fit with the available evidence. For each cause, name a check that could distinguish it from the others. Explain why a traceback alone does not establish the cause.
 
-Response and reason: [complete]
+Response and reason: Failure selected: test_f8_01_same_practitioner_cannot_have_two_scheduled_appointments.
+
+Exception/assertion: Failed: DID NOT RAISE <class 'ValueError'>.
+
+Expected: The second scheduled appointment for the same practitioner and date/time should be rejected.
+
+Observed: The second booking was accepted.
+
+Test location: project/tests/test_regressions.py.
+
+Application call path: Regression test → appointment booking service → has_practitioner_conflict() in data_store.py.
+
+Requirement: The same practitioner cannot have two scheduled appointments at the same date and time.
+
+Ranked possible causes:
+1. The practitioner comparison may be reversed. Check whether the method compares the practitioner ID using == or !=.
+2. The booking service may not be using the conflict-checking method. Inspect the booking service call.
+3. The appointment date/time or status may not match the conflict conditions. Inspect the stored appointment values.
+The traceback identifies where the failure was reported, but further code inspection and testing are needed to establish the root cause. Inspection confirmed that the practitioner comparison used != instead of ==.
 
 ### A.6 Exit question
 Why is changing code immediately after seeing a failure often a poor debugging strategy?
 
-Response and reason: [complete]
+Response and reason: Changing code immediately after seeing a failure is a poor debugging strategy because the failure may have several possible causes. It is important to understand the expected behaviour, reproduce the issue, inspect the evidence and identify the root cause before changing anything. This avoids unnecessary changes and introducing new bugs.
 
 
 Classification responses (1–5, each with reason): [complete]
@@ -203,8 +245,6 @@ The official preparation was performed by Pranav. The local branch and test resu
 
 ## E. Human-first hypotheses
 
-## E. Human-first hypotheses
-
 ### F8-01 human entry
 
 **Likely cause and why plausible:**
@@ -320,14 +360,17 @@ Copilot supported my initial hypothesis. The main issue is that `find_appointmen
 
 | Checkpoint | Code SHA or precise diff | Command and working directory | Actual result and artefact reference |
 |---|---|---|---|
-| F8-01 before repair | [complete] | [complete] | [complete] |
-| F8-01 after repair | [complete] | [complete] | [complete] |
-| F8-02 before repair | [complete] | [complete] | [complete] |
-| F8-02 after repair | [complete] | [complete] | [complete] |
-| Full suite after both repairs, before refactor | [complete] | [complete] | [complete] |
+| F8-01 before repair | Prepared branch SHA: ab2234955ce40f4a4bec24fb160939001a92e37f| py -m pytest tests/test_regressions.py -q — project| Failed: conflict test did not raise ValueError.|
+| F8-01 after repair | 	Repair/refactor commit: 4f13983e9ebab0c73acde623f0a30d046b9fb162| Focused regression test — project |F8-01 passed; two F8-02 failures remained at that intermediate checkpoint.|
+| F8-02 before repair | 	Prepared branch SHA: ab2234955ce40f4a4bec24fb160939001a92e37f| py -m pytest tests/test_regressions.py -q — project| Failed: cancelled appointment lookup returned None; repeated cancellation raised LookupError.|
+| F8-02 after repair Repair/refactor commit: 4f13983e9ebab0c73acde623f0a30d046b9fb162| Repair/refactor commit: 4f13983e9ebab0c73acde623f0a30d046b9fb162|py -m pytest tests/test_regressions.py -q — project|3 passed.
+| Full suite after both repairs, before refactor |Separate checkpoint SHA not recorded| py -m pytest -q — project| 41 passed|
 
-Explain how the assertions detect each relevant incorrect result and protect previous behaviour: [complete]
-Unrelated failures investigated / resolution: [complete or not applicable with reason]
+Explain how the assertions detect each relevant incorrect result and protect previous behaviour: The F8-01 regression test checks that a second scheduled appointment for the same practitioner at the same date and time raises ValueError, while a different practitioner can still book at that time. The F8-02 tests check that a cancelled appointment remains retrievable as the same object and that repeated cancellation raises ValueError without changing its cancelled state. Keeping these tests helps prevent the defects from returning after future code changes.
+
+Unrelated failures investigated / resolution: No unrelated failures were reported in the recorded Stage 8 regression results. The full test suite passed after the repairs.
+
+The document records the combined repair/refactor commit, but not separate commit SHAs for each intermediate repair checkpoint. The table makes that limitation clear rather than inventing separate commits.
 
 ## H. Refactoring decision and before/after verification
 
@@ -345,7 +388,11 @@ Unrelated failures investigated / resolution: [complete or not applicable with r
 - Practitioner conflict detection must continue working correctly.
 - All existing tests and the three regression tests must continue passing.
 Before result: see G, full passing suite.
-**Actual change / diff / separate refactor SHA:**
+**Commit SHA:** `4f13983e9ebab0c73acde623f0a30d046b9fb162`
+
+**Commit message:** `Fix appointment defects and refactor lookup validation`
+
+The commit includes the SmartCare data store changes, three regression tests and the updated Stage 8 evidence document.
 
 Updated `find_appointment()` in `project/smartcare/data_store.py` to use the existing `required_text()` helper instead of manually checking the appointment ID. This reduced duplicated validation logic and kept the existing lookup behaviour unchanged.
 
@@ -359,79 +406,128 @@ Working directory: `project`
 **Result — accepted, revised or rejected / reason / behaviour-preservation conclusion:**
 
 Accepted. The refactoring was successful because it reused the existing validation helper and made the code more consistent. All three regression tests and all 41 project tests passed after the change. The required appointment lookup and cancellation behaviour remained intact.
+
+**Partner review feedback and response:**
+
+My group partner reviewed Pull Request #8 and requested one improvement. They recommended replacing the magic status string `"scheduled"` in `has_practitioner_conflict()` with the existing enum comparison `AppointmentStatus.SCHEDULED`.
+
+I accepted this suggestion and updated the condition to:
+
+`appointment.status is AppointmentStatus.SCHEDULED`
+
+After making the change, I reran the tests:
+
+- Focused regression tests: 3 passed.
+- Full test suite: 41 passed.
+
+The change improved consistency with the existing domain model without changing the intended appointment conflict behaviour.
+
 ## I. Git, human review and integration
 
-Issues for both defects / refactor scope and owners: [complete]
-Branch / prepared, repair and refactor checkpoints: [link B/C/D/H]
-PR link and another member's reviewer identity: [complete]
-Key human feedback, difference from Copilot findings and response/outcome: [complete]
-Actual review approval / merge evidence: [complete]
-Integrated code SHA and team pull/retest command / working directory / result: [complete]
-Evidence-only later SHA / explanation if different: [complete or not applicable]
-Each member's substantive contribution and artefact: [complete]
+Issues for both defects / refactor scope and owners: F8-01 – Practitioner conflict detection. Owner: Harleen Partola.
+
+F8-02 – Cancelled appointment history lookup. Owner: Harleen Partola.
+
+Refactoring – Reuse the existing required_text() helper in find_appointment() to remove duplicated validation.
+
+Branch / prepared, repair and refactor checkpoints: Prepared branch: debug/stage08.
+
+Local prepared-branch SHA: ab2234955ce40f4a4bec24fb160939001a92e37f.
+
+Repair/refactor commit: 4f13983e9ebab0c73acde623f0a30d046b9fb162.
+
+Common integration branch: main.
+
+PR link and another member's reviewer identity: Pull request #8: Stage 8 pull request.
+
+Another group member reviewed the pull request and requested replacing the magic status string "scheduled" with AppointmentStatus.SCHEDULED. The reviewer's name needs to be confirmed from the GitHub review record.
+
+Key human feedback, difference from Copilot findings and response/outcome: The human reviewer suggested using the existing AppointmentStatus.SCHEDULED enum instead of the string "scheduled" in the practitioner conflict check. This feedback improved consistency with the domain model. The change was accepted, and the focused regression tests and full test suite passed afterward. Copilot had identified the reversed practitioner comparison and the cancelled-appointment lookup condition. The human feedback addressed an additional consistency improvement.
+
+Actual review approval / merge evidence: PR #8 was approved and merged, as previously confirmed. The GitHub pull request provides the review and merge record.
+
+Integrated code SHA and team pull/retest command / Integrated Stage 8 SHA: 893efdb – merge commit for PR #8.
+
+Team regression command: python -m pytest -q.
+
+Stage 9 work later passed the full suite with 58 tests. For the original Stage 8 integration, the recorded full-suite result was 41 passed.
+
+Evidence-only later SHA / explanation if different: Not applicable based on the currently recorded information. No separate evidence-only commit has been confirmed.
+
+Each member's substantive contribution and artefact: Harleen Partola: investigated F8-01 and F8-02, recorded human-first hypotheses, reviewed Copilot suggestions, implemented the fixes and refactoring, added regression tests and updated the Stage 8 evidence.
+
+Pranav: completed the official Stage 8 preparation utility and pushed the prepared debugging branch.
+
+Other group member contributions: confirm from the group's actual work and GitHub records before adding names or responsibilities.
 
 ## J. Required reflections
 
-1. Which Copilot diagnosis appeared convincing but lacked evidence? [complete; report honestly if none and discuss the least-supported real suggestion]
-2. What evidence changed your group's view? [complete]
-3. How did regression tests protect the refactoring? [complete]
+1. Which Copilot diagnosis appeared convincing but lacked evidence?The suggestion that the application might be using a different data-store object was possible, but there was no evidence supporting it. The inspected code showed that the reversed practitioner comparison was the actual cause of F8-01.
+2. What evidence changed your group's view? The regression tests and inspection of data_store.py provided the important evidence. The practitioner comparison used != instead of ==, and find_appointment() excluded cancelled appointments. These findings directly explained the observed failures.
+3. How did regression tests protect the refactoring? The regression tests checked that the original appointment behaviour still worked after the refactoring. They confirmed that cancelled appointments remained retrievable, repeated cancellation was rejected, and practitioner conflict detection continued working. The full test suite also passed after the changes.
 
 ## K. Ten formative questions
 
 1. What should an engineer do before changing code in response to a failure?
 
-Response: [complete]
+Response: Reproduce the failure, understand the expected behaviour, inspect the evidence and identify the likely root cause before changing code.
 
 2. Where should expected behaviour come from during debugging?
 
-Response: [complete]
+Response: Expected behaviour should come from the project requirements, acceptance criteria and agreed system design.
 
 3. What is a debugging hypothesis?
 
-Response: [complete]
+Response: A debugging hypothesis is a possible explanation for why a problem is happening. It needs to be checked against evidence.
 
 4. What is a regression test and why is it retained?
 
-Response: [complete]
+Response:A regression test checks that a previously fixed problem does not happen again after future changes.
 
 5. What is meant by root cause?
 
-Response: [complete]
+Response: The root cause is the underlying reason a defect happens, rather than just the symptom that appears.
 
 6. What is refactoring?
 
-Response: [complete]
+Response: Refactoring means improving the structure or readability of code without changing its external behaviour.
 
 7. What is a swallowed exception?
 
-Response: [complete]
+Response:A swallowed exception happens when an application catches an error but hides it instead of handling it properly or informing the user.
 
 8. What is a code smell?
 
-Response: [complete]
+Response: A code smell is a sign that code may be difficult to understand, maintain or change, even if it currently works.
 
 9. How should GitHub Copilot-generated debugging diagnoses be treated?
 
-Response: [complete]
+Response: Copilot suggestions should be treated as possible explanations, not confirmed facts. Developers must inspect the code, test the suggestions and make their own decisions.
 
 10. What is the Stage 8 engineering rule?
 
-Response: [complete]
-
+Response: Understand the failure, use evidence to find the root cause, make the smallest justified repair and run regression tests to check that existing behaviour still works.
 ## L. Completion and handover
 
-- [ ] Existing project, earlier tests and stage records preserved.
-- [ ] Passing Stage 7 SHA and safe preparation details recorded.
-- [ ] Both defects reproduced with meaningful failing tests.
-- [ ] Both human hypotheses recorded before Copilot; actual suggestions evaluated with evidence.
-- [ ] Supported causes and minimal repairs explained; focused and full regression results recorded.
-- [ ] One genuine refactor verified under passing before/after tests.
-- [ ] Human PR review, feedback resolution and integrated retest recorded.
-- [ ] Tutorial, three reflections and ten formative responses complete.
-- [ ] Local recovery metadata excluded from submitted source.
-- [ ] Same project and full suite ready for Stage 9 after Stage 8 integration, verification and recording.
+- [Recorded ] Existing project, earlier tests and stage records preserved.
+- [ Recorded] Passing Stage 7 SHA and safe preparation details recorded.
+- [ Recorded] Both defects reproduced with meaningful failing tests.
+- [Recorded ] Both human hypotheses recorded before Copilot; actual suggestions evaluated with evidence.
+- [Recorded ] Supported causes and minimal repairs explained; focused and full regression results recorded.
+- [ Recorded] One genuine refactor verified under passing before/after tests.
+- [ Confirm reviewer identity] Human PR review, feedback resolution and integrated retest recorded.
+- [Complete after pasting ] Tutorial, three reflections and ten formative responses complete.
+- [Verify Git status ] Local recovery metadata excluded from submitted source.
+- [ Stage 9 subsequently completed] Same project and full suite ready for Stage 9 after Stage 8 integration, verification and recording.
 
-Verified integrated code SHA / result: see I.
-Submitted SHA and evidence-only difference if any: [complete]
-Unresolved issues or incomplete checks / owner / next action: [complete]
-Handover note: [complete]
+Verified integrated code SHA / result
+893efdb – Stage 8 merge commit on main. The Stage 8 evidence records 41 passing tests after the repairs. Stage 9 subsequently passed 58 tests.
+
+Submitted SHA and evidence-only difference
+Stage 8 integrated code SHA: 893efdb. No separate evidence-only SHA has been confirmed.
+
+Unresolved issues or incomplete checks / owner / next action
+Confirm the identity of the human reviewer from PR #8 and verify that temporary Stage 8 preparation and recovery files were not included in the submitted repository. Owner: Harleen Partola.
+
+
+Stage 8 repaired the practitioner conflict and cancelled appointment history defects. Regression tests were added, the appointment lookup validation was refactored, and the changes were reviewed and merged through PR #8. The integrated Stage 8 version was used as the starting point for Stage 9. The project was then extended with appointment queries and interactive console integration.
