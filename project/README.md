@@ -58,3 +58,12 @@ The application does not implement appointment rescheduling or additional assura
 The automated test suite covers domain behaviour, services, regression checks, query functions and practitioner appointment listing workflows.
 
 The interactive menu was also manually tested for successful registration, booking, cancellation, listing, status filtering, invalid input handling and recovery from errors.
+
+## Release usage
+
+Run commands from this `project/` directory.
+
+Install the development test dependency:
+
+```bash
+python3 -m pip install -r requirements-dev.txt

@@ -8,92 +8,165 @@ Members and UG/PG applicability: [response]
 
 ## A Release scope and starting SHA
 
-Release label/version and requirements baseline: [response]
-Common starting SHA / branch / applicable members: [response]
-PG starting SHA / branch / applicable members or not applicable: [response]
-Working-state review and approved integration: [response]
-Protected common candidate and PG differences: [response]
-Feature freeze / owner / verifier: [response]
+Group/tutorial: 4483 Software Technology 1 – Online Group 3, Tuesday 5:30–7:30 pm
+
+Members and UG/PG applicability:
+- Akshera Kandula – `aksherakandula-git` – UG
+- Harleen Partola – `Harleenpartola` – UG
+
+## A Release scope and starting SHA
+
+- Starting branch: `main`
+- Starting integrated SHA: `7fd1678247413101dc9075d8b49d4c3894867d06`
+- Release owner: Akshera Kandula
+- Applicable scope: Common UG release scope only.
+- Previous checkpoint: Stage 9 completed, reviewed, integrated and verified on `main`.
+- Initial repository state: Clean working tree; no unexpected unstaged or staged changes were present.
+- Initial full regression command: `python3 -m pytest -q`
+- Working directory: `project/`
+- Initial regression result: 58 passed, 0 failed.
+- Interactive application check: `python3 main.py --interactive` opened the SmartCare menu successfully.
+- Release scope: Verify the completed SmartCare functionality for FR-01–FR-09, QRY-01–04, FP-01–03 and the required console/UI behaviours using the accumulated tests and release checks.
+- Feature freeze decision: Optional feature development is frozen for Stage 12. Only genuine release blockers or necessary release/documentation corrections will be changed.
+- PG-only Stage 10/11 scope: Not applicable to this UG-only group.
 
 
 ## B Requirements and release readiness matrix
 
-Tutorial activity 1: All tests pass, README setup is incomplete, one dependency is unreviewed and a known limitation is undocumented. Decide Release / Release with conditions / Do not release and justify: [response]
+## B Tutorial release readiness and evidence
 
-Tutorial activity 2 and actual readiness matrix. Add exact requirement/acceptance IDs, evidence and reviewer; distinguish common/PG applicability.
+### Activity 1 – Release readiness decision
 
-| Release claim / requirement / scope | Evidence | Location/link and SHA | Reviewer | Sufficient? | Gap/action |
-|---|---|---|---|---|---|
-| Cancellation history works | [response] | [response] | [response] | [response] | [response] |
-| Architecture responsibilities are appropriate | [response] | [response] | [response] | [response] | [response] |
-| Rescheduling is safe — PG only | [response] | [response] | [response] | [response] | [response] |
-| AI use is responsible — common recheck / PG assurance | [response] | [response] | [response] | [response] | [response] |
-| System is maintainable | [response] | [response] | [response] | [response] | [response] |
-| FR-01–03 register/find and validation | [response] | [response] | [response] | [response] | [response] |
-| FR-04–05 booking/conflict rules | [response] | [response] | [response] | [response] | [response] |
-| FR-06–08 cancellation/history/find | [response] | [response] | [response] | [response] | [response] |
-| FR-09 and QRY/FP listing/filter/order/purity | [response] | [response] | [response] | [response] | [response] |
-| UI full console sequence and error recovery | [response] | [response] | [response] | [response] | [response] |
-| Session-only scope / FR-10 retired | [response] | [response] | [response] | [response] | [response] |
-| PG RES and assurance integration | [response] | [response] | [response] | [response] | [response] |
+Decision: **Release with conditions**
 
+Although all tests are passing in the scenario, passing tests alone are not sufficient evidence for release. The README setup instructions are incomplete, one dependency has not been reviewed, and a known limitation has not been documented. These gaps affect reproducibility, maintainability and transparency.
+
+Before final sign-off:
+- complete and verify the README setup/run instructions;
+- review the dependency and confirm its purpose/origin;
+- document the known limitation clearly;
+- rerun the release checks after any required correction.
+
+The candidate should only be signed off once these release conditions have been addressed.
+
+### Activity 2 – Evidence for release claims
+
+| Claim | Evidence source/location | Reviewer/check | Sufficient? | Gap/action |
+|---|---|---|---|---|
+| Cancellation history works | `project/tests/test_regressions.py`, including `test_f8_02_cancelled_appointment_remains_available_in_store`, plus retained Stage 6/7 cancellation tests | Human review during Stage 8 and accumulated pytest regression suite | Yes for the stated course requirement | Release verification should rerun the accumulated suite and demonstrate retained CANCELLED history. |
+| Architecture has appropriate responsibilities | `project/smartcare/domain.py`, `data_store.py`, `services.py`, `queries.py`, `console.py` and associated tests | Human inspection of responsibilities and Stage 6–9 reviews | Yes for the course architecture | Recheck at release that no persistence layer, unrelated framework or responsibility leakage has been introduced. |
+| Rescheduling is safe | PG-only requirement | Not applicable to this UG-only group | N/A | Stage 10/11 PG work is outside our applicable release scope. |
+| AI use is responsible | Stage 7 and Stage 8 evidence records containing human-first analysis and Accept/Modify/Reject decisions | Human verification of AI suggestions against requirements, code and tests | Yes for recorded examples | Final release check must confirm no unexplained AI-generated changes, secrets, invented requirements or unsupported dependencies remain. |
+| System is maintainable | Focused domain/service/query structure, descriptive tests, Stage 8 behaviour-preserving refactor and 58-test regression suite | Human code review and regression verification | Sufficient for the course release | Continue documenting known limitations and avoid unnecessary architecture or speculative features. |
+
+### Activity 3 – Architecture and evidence discussion
+
+**Why use one shared `SmartCareDataStore` with services and pure queries?**  
+One shared `SmartCareDataStore` preserves the same in-session Patient, Practitioner and Appointment objects across the services. Services coordinate use cases such as registration, booking and cancellation, while pure query functions receive collections explicitly and return selected/sorted results without mutating the store. This keeps state management, workflows and query processing separated and easier to test.
+
+**Evidence that a cancelled appointment remains retrievable:**  
+`project/tests/test_regressions.py::test_f8_02_cancelled_appointment_remains_available_in_store` books an appointment, cancels it, checks that its status is `AppointmentStatus.CANCELLED`, verifies that `find_appointment("A1")` returns the same appointment object, and confirms that the appointment remains in `list_appointments()`.
+
+**Example of an AI-generated suggestion that was rejected or modified:**  
+During Stage 7 testing, a proposed 30-minute appointment-overlap rule was rejected because FR-05 only defines a conflict for the same practitioner at the exact same datetime while the existing appointment is `SCHEDULED`. Adding an overlap rule would have invented behaviour not supported by the requirement. AI suggestions were therefore treated as candidates rather than requirements.
+
+**One unresolved limitation:**  
+SmartCare stores data only for the current session. Records are lost when the process ends. Persistent storage is deliberately outside the current revision 2 course scope.
+
+**What would break if session-state lookup or query responsibilities changed?**  
+If lookup stopped returning the actual objects held by the shared store, identity and retained-history behaviour could break. If query functions began mutating the store or performing service responsibilities, deterministic non-mutating query behaviour and the separation between storage, workflows and pure selection/sorting would be weakened.
 
 ## C Full regression results
 
-| Suite/scope | Environment/version | Working directory and command | Tested SHA | Actual result | Evidence link |
-|---|---|---|---|---|---|
-| Complete common | [response] | [response] | [response] | [response] | [response] |
-| Complete PG if applicable | [response] | [response] | [response] | [response] | [response] |
-| Affected focused checks after correction | [response] | [response] | [response] | [response] | [response] |
-| Full integrated recheck | [response] | [response] | [response] | [response] | [response] |
-Prior assertions preserved / reviewed test diff: [response]
-Remaining failure / limitation: [response]
+| Suite/scope | Environment/version | Working directory and command | Tested SHA | Actual result |
+|---|---|---|---|---|
+| Complete common | Python 3.14.3; pytest 8.3.5 | `project/` — `python3 -m pytest -q` | `7fd1678247413101dc9075d8b49d4c3894867d06` | 58 passed, 0 failed |
+| Complete PG if applicable | Not applicable — UG-only group | Not applicable | Not applicable | Not applicable |
+| Affected focused checks after correction | No Stage 12 corrective code change required at this point | Not applicable | `7fd1678247413101dc9075d8b49d4c3894867d06` | No Stage 12 release defect identified requiring a focused correction |
+| Full integrated recheck | Python 3.14.3; pytest 8.3.5 | `project/` — `python3 -m pytest -q` | `7fd1678247413101dc9075d8b49d4c3894867d06` | 58 passed, 0 failed |
+
+Prior assertions preserved / reviewed test diff:
+All accumulated Stage 6–9 tests were retained. No tests were removed or weakened for the Stage 12 release check.
+
+Demo command:
+`python3 main.py`
+
+Interactive command:
+`python3 main.py --interactive`
+
+Interactive result:
+SmartCare menu opened successfully and exited normally using option `0`.
+
+Remaining failure / limitation:
+No regression failures were observed. SmartCare remains session-only, so records are lost when the process exits.
 
 
 ## D Console and end to end demonstration
 
-| Demo step | Synthetic setup/input | Expected requirement | Observed result | Evidence/link |
-|---|---|---|---|---|
-| Problem and stakeholders | [response] | [response] | [response] | [response] |
-| Register and find Patient and two Practitioners | [response] | [response] | [response] | [response] |
-| Valid booking | [response] | [response] | [response] | [response] |
-| Same practitioner exact-time conflict rejected | [response] | [response] | [response] | [response] |
-| Different practitioner same time allowed | [response] | [response] | [response] | [response] |
-| Cancel SCHEDULED and retain/find CANCELLED object | [response] | [response] | [response] | [response] |
-| Invalid/repeated cancellation rejected | [response] | [response] | [response] | [response] |
-| Default all-status listing | [response] | [response] | [response] | [response] |
-| Explicit filtering / empty vs unknown / deterministic order | [response] | [response] | [response] | [response] |
-| Invalid date/status/menu/lookup recovery and continued operation | [response] | [response] | [response] | [response] |
-| Session-only limitation and normal exit | [response] | [response] | [response] | [response] |
-| One meaningful requirement-linked pytest test explained | [response] | [response] | [response] | [response] |
-| Architecture and one actual AI decision / known limitation | [response] | [response] | [response] | [response] |
-| PG reschedule identity/participants/time and no-op | [response] | [response] | [response] | [response] |
-| PG conflict/invalid status/failure non-mutation | [response] | [response] | [response] | [response] |
-| PG old slot / current lookup/list ordering / assurance risks | [response] | [response] | [response] | [response] |
-Stable demo owner / fresh process / command: [response]
-PG demonstrations through service/tests or not applicable: [response]
+## D Console and end to end demonstration
+
+| Demo step | Synthetic setup/input | Expected requirement | Observed result / evidence |
+|---|---|---|---|
+| Problem and stakeholders | SmartCare Community Clinic appointment workflow using synthetic patients, practitioners and appointments | Reception/admin staff need reliable registration, lookup, booking, cancellation and practitioner schedule information without duplicate/conflicting bookings | Demonstration used the completed SmartCare console with synthetic records only. |
+| Register and find Patient and two Practitioners | Patient `P1` / Alex Example; practitioners `D1` / Dana Example / General Practice and `D2` / Sam Example / Cardiology | Registered participants can be created and subsequently found by their IDs | Patient and practitioners were registered and found successfully through the menu. |
+| Valid booking | `A1`, patient `P1`, practitioner `D1`, `2026-10-01 09:00` | A valid appointment using registered participants and a free practitioner/time is stored as `SCHEDULED` | `A1` was booked successfully. |
+| Same practitioner exact-time conflict rejected | Attempt `A_CONFLICT`, `P1`, `D1`, `2026-10-01 09:00` while `A1` was already SCHEDULED | FR-05 / AC-04.1 requires a second SCHEDULED appointment for the same practitioner at the exact same datetime to be rejected | Conflict booking was rejected and the session continued. Existing stored appointment state was preserved. |
+| Different practitioner same time allowed | `A2`, `P1`, `D2`, `2026-10-01 09:00` | AC-04.2 permits another practitioner to have an appointment at the same datetime | `A2` was booked successfully for `D2` at the same time. |
+| Cancel SCHEDULED and retain/find CANCELLED object | Cancel `A1`, then find `A1` | FR-06/FR-07 require cancellation to change status to `CANCELLED` while retaining appointment history; FR-08 supports lookup | `A1` was cancelled and remained findable with CANCELLED status. Same-object identity is additionally verified by the retained regression tests. |
+| Invalid/repeated cancellation rejected | Attempt to cancel `A1` again | Repeated cancellation must raise/recover from the invalid transition without removing or mutating the retained history incorrectly | Repeated cancellation was rejected and the menu remained usable. |
+| Freed slot reused | `A3`, `P1`, `D1`, `2026-10-01 09:00` after `A1` was cancelled | A CANCELLED appointment no longer occupies the practitioner/time conflict slot | `A3` was booked successfully for `D1` at the previously occupied time. |
+| Default all-status listing | List practitioner `D1`, leave status blank | Default practitioner listing includes appointments of all statuses | Listing returned D1 appointments including retained CANCELLED history and the new SCHEDULED booking. |
+| Explicit status filtering | List practitioner `D1`, status `scheduled` | An explicit status filter returns only appointments matching that status | Scheduled-only listing returned the current scheduled appointment(s) and excluded the cancelled appointment. |
+| Unknown practitioner listing | List practitioner `D999`, blank status | A valid but unknown practitioner must be reported as absent and the console must recover | Unknown practitioner was rejected/reported and the menu continued normally. |
+| Invalid menu choice | Enter menu option `99` | Unknown menu input must not crash the application | Invalid choice was handled and the menu was shown again. |
+| Invalid date/time recovery | Attempt booking using `2026-02-30 09:00` | Malformed/impossible datetime input must be rejected without creating a partial booking | Invalid date was rejected and the menu continued operating. |
+| Invalid listing status recovery | List `D1` using status `pending` | Only supported statuses (`scheduled`, `cancelled`, `completed`) are accepted | Invalid status was rejected and the console returned to the menu. |
+| Session-only limitation and normal exit | Menu option `0` | Application exits normally and clearly states that session data is discarded | Console printed `Exiting SmartCare.` and `Session-only data: records are lost on exit.` |
+| One meaningful requirement-linked pytest test | `project/tests/test_regressions.py::test_f8_02_cancelled_appointment_remains_available_in_store` | A meaningful test should demonstrate a specific requirement rather than only execute code | Test verifies cancellation retains the same appointment in the store with `CANCELLED` status; full accumulated suite also passed with 58 tests. |
+| Architecture and one actual AI decision | Shared store + services + pure queries; Stage 7 overlap suggestion reviewed | Domain/store/service/query/console responsibilities remain separated; AI suggestions require human verification | Shared `SmartCareDataStore` retains session objects; services coordinate workflows; queries filter/sort without mutation; console handles interaction. A proposed 30-minute overlap rule was rejected because it was not supported by FR-05. |
+| Known course-release limitation | Current-session storage only | Release limitations must be stated rather than hidden | SmartCare has no durable persistence: all records are lost when the process exits. |
+
+Stable demo owner / fresh process / command:
+Akshera Kandula; fresh SmartCare interactive session from `project/` using `python3 main.py --interactive`.
+
+PG demonstrations through service/tests or not applicable:
+Not applicable — UG-only group. Stage 10/11 PG rescheduling and assurance demonstrations are outside the applicable release scope.
 
 
 ## E Final code quality and AI review
 
-| Review area | Code/evidence location | Finding or no finding | Correction/no change and recheck |
-|---|---|---|---|
-| OOP responsibilities and pure-query boundaries | [response] | [response] | [response] |
-| PascalCase and snake_case naming | [response] | [response] | [response] |
-| Useful type hints and meaningful docstrings | [response] | [response] | [response] |
-| Four-space indentation and imports/layout | [response] | [response] | [response] |
-| Focused methods / duplication / dead or commented code | [response] | [response] | [response] |
-| Globals / leakage / unnecessary inheritance or frameworks | [response] | [response] | [response] |
-| No SQLite/persistence/repository ABCs/speculative features | [response] | [response] | [response] |
-| Synthetic data / secrets / dependencies / provenance | [response] | [response] | [response] |
-| Significant common Copilot contributions and human verification | [response] | [response] | [response] |
-| PG plan/diff/test approvals and Stage 11 VERIFY/TRUST | [response] | [response] | [response] |
+### Code quality and architecture review
 
-| AI claim | Affected requirement/code | Human check | Accept/Modify/Reject and reason | Actual outcome/action or no change |
+| Review area | Evidence / observation | Decision / outcome |
+|---|---|---|
+| Naming and formatting | Classes use PascalCase and functions/methods/variables use snake_case. Existing modules use readable imports, four-space indentation and focused methods. | No Stage 12 correction required. |
+| Domain responsibility | `Patient` and `Practitioner` own validated entity data. `Appointment` and `AppointmentStatus` own appointment state and cancellation rules. | Responsibility remains appropriate; no change required. |
+| Data-store responsibility | `SmartCareDataStore` retains the current-session Patient, Practitioner and Appointment objects and provides add/find/list/conflict operations. | Correct for the revision 2 session-only architecture; no persistence layer should be added. |
+| Service responsibility | Services coordinate registration, lookup, booking, cancellation and practitioner-listing workflows using the shared store and domain objects. | No responsibility leakage requiring correction was identified. |
+| Query responsibility | `appointment_sort_key` and `select_appointments` operate from explicit inputs and return selected/sorted results without taking over console or store responsibilities. | Keep as pure query functions; do not force them into classes. |
+| Console responsibility | `console.py` handles menu input/output, parsing, display and recovery from expected user errors while delegating business behaviour to services/domain objects. | Appropriate separation maintained. |
+| Dependencies | `requirements-dev.txt` uses the pinned pytest dependency (`pytest 8.3.5`). No new runtime framework, SQL/database layer or speculative dependency is required. | No additional dependency required for release. |
+| Unnecessary architecture/features | No SQL persistence, repository abstraction, authentication framework or speculative Stage 12 feature is required by the current release scope. | Feature freeze maintained; no cosmetic redesign required. |
+| Regression impact | Full accumulated suite on the integrated candidate reports 58 passed. | No behaviour-preserving Stage 12 code correction was required at this point. |
+
+### Final AI-use review
+
+| AI claim / suggestion | Affected requirement/code | Independent human check | Decision | Actual outcome |
 |---|---|---|---|---|
-| [response] | [response] | [response] | [response] | [response] |
-Access route or approved equivalent / limitations: [response]
-Available AI evidence and missing evidence honestly disclosed: [response]
+| Proposed 30-minute appointment-overlap rule during Stage 7 test design | FR-05 / practitioner conflict behaviour | Checked the current requirement, which defines conflict for the same practitioner at the exact same datetime while SCHEDULED | Reject | No overlap rule was added because it would invent behaviour outside the approved requirement. |
+| Candidate test for same-practitioner exact-time conflict | FR-05 / AC-04.1 | Compared the candidate with the requirement and verified it through the retained conflict tests | Accept | Requirement-linked test evidence was retained and continues to pass in the 58-test regression suite. |
+
+Final responsible-AI conclusion:
+AI/Copilot suggestions were treated as candidates rather than authoritative requirements. Significant suggestions were checked against the approved SmartCare requirements, actual code behaviour and test evidence before acceptance. Unsupported behaviour was rejected. No autonomous AI release decision was used.
+
+Security/privacy/dependency check:
+Only synthetic SmartCare data was used. No credentials, tokens, real patient information or confidential peer-assessment material were intentionally included in the application evidence. No AI-suggested unknown dependency was installed for the release.
+
+Access route or approved equivalent / limitations:
+GitHub Copilot or the teaching-team approved equivalent was used only as an engineering assistant for suggestions and review. No autonomous AI agent or AI release approval was used. Final decisions were made and verified by the group using requirements, code review and test evidence.
+
+Available AI evidence and missing evidence honestly disclosed:
+Available evidence includes the recorded Stage 7 test-design suggestions and Accept/Modify/Reject decisions, plus Stage 8 debugging/review decisions and their human verification. The release evidence relies on the recorded prompts, decisions and verification already retained in the project.
 
 
 ## F README and reproducibility check
