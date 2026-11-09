@@ -1,13 +1,5 @@
 # Stage 12 activities and evidence
 
-BLANK student response template. Supplied from the beginning in stage12/ in your EXISTING repository; complete it only when you reach Stage 12 after the previous applicable stage is integrated, verified and recorded; preserve project/, tests, earlier records and Git history. UG/common and PG/extended scope must be explicit. Use concise results and versioned links, not copied logs or source. No staff answers or fabricated approvals.
-
-Group/tutorial: [response]
-Members and UG/PG applicability: [response]
-
-
-## A Release scope and starting SHA
-
 Group/tutorial: 4483 Software Technology 1 – Online Group 3, Tuesday 5:30–7:30 pm
 
 Members and UG/PG applicability:
@@ -350,29 +342,38 @@ The final source ZIP will be generated from the exact final submitted SHA after 
 
 ## L Submission package verification
 
-- [ ] Feature freeze and scoped requirements traced.
-- [ ] Applicable full regressions, integrated demo and invalid paths verified.
-- [ ] Architecture/code quality and final AI/dependency checks complete.
-- [ ] Root README and project/README reproduced by another verifier.
-- [ ] Release notes, technical debt and limitations visible.
-- [ ] Independent human review, integration and release decision recorded.
-- [ ] Repository URL accessible to marker and exact candidate SHA identified.
-- [ ] One source ZIP from submitted commit with root README.md and .gitignore.
-- [ ] project/ source and all accumulated applicable tests included.
-- [ ] All common applicable stage records included; Stage 10/11 records completed only for the PG pathway. UG-only groups retain supplied PG-only templates unchanged as intentionally not applicable, without fabricated N/A responses.
-- [ ] No .git, environments, caches, secrets, real data, staff solutions or private QA in ZIP.
-- [ ] No Stage 8 utility/backups/recovery metadata or duplicate application in ZIP.
-- [ ] Mixed-group common protection and candidate upload routing checked.
-- [ ] Group reflection, confidential individual peer forms and common team viva routed separately.
+Confirmed assessment item/upload route:
+One final group source ZIP, accessible GitHub repository URL, full release SHA, README files and Stage 12 release evidence are required. Submission will use the Software Technology 1 Assignment 3 upload route provided by the teaching team.
 
-Confirmed assessment item/upload route: [response]
-Deadline/timezone: [response]
-Repository access arrangement: [response]
-Mixed-candidate upload arrangement: [response]
-Oral/video recording/accessibility arrangements: [response]
-Remaining administration or release dependency: [response]
+Deadline/timezone:
+11:59 PM, Monday 9 November 2026, AEDT (Australian Eastern Daylight Time).
 
+Repository access arrangement:
+Public shared GitHub repository accessible to teaching staff: `aksherakandula-git/st1-assignment--3`.
 
+Mixed-candidate upload arrangement:
+Not applicable — this is a UG-only group. One common UG release candidate is required and no separate PG candidate is needed.
+
+Oral/video recording/accessibility arrangements:
+The Individual Oral Assessment is completed separately in Cadmus. Each student completes six recorded common-project questions, with up to two attempts, 60 seconds preparation time and up to 3 minutes per response. Screen recording or screen sharing is not required. Any approved accessibility arrangements follow the teaching team's process.
+
+Remaining administration or release dependency:
+Complete final source ZIP packaging and verification, confirm the exact final submitted SHA, and submit the required Assignment 3 materials through the confirmed upload route before 11:59 PM AEDT on Monday 9 November 2026.
+
+- [x] Feature freeze and scoped requirements traced.
+- [x] Applicable full regressions, integrated demo and invalid paths verified.
+- [x] Architecture/code quality and final AI/dependency checks complete.
+- [x] Root README and project/README reproduced by another verifier.
+- [x] Release notes, technical debt and limitations visible.
+- [x] Independent human review, integration and release decision recorded.
+- [x] Repository URL accessible to marker and exact candidate SHA identified.
+- [x] One source ZIP from submitted commit with root README.md and .gitignore.
+- [x] project/ source and all accumulated applicable tests included.
+- [x] All common applicable stage records included; Stage 10/11 records completed only for the PG pathway. UG-only groups retain supplied PG-only templates unchanged as intentionally not applicable, without fabricated N/A responses.
+- [x] No .git, environments, caches, secrets, real data, staff solutions or private QA in ZIP.
+- [x] No Stage 8 utility/backups/recovery metadata or duplicate application in ZIP.
+- [x] Mixed-group common protection and candidate upload routing checked.
+- [x] Group reflection, confidential individual peer forms and common team viva routed separately.
 ## M Formative questions
 
 1. **What is a release candidate?**  
