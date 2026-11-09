@@ -33,8 +33,6 @@ Members and UG/PG applicability:
 
 ## B Requirements and release readiness matrix
 
-## B Tutorial release readiness and evidence
-
 ### Activity 1 – Release readiness decision
 
 Decision: **Release with conditions**
@@ -100,8 +98,6 @@ SmartCare menu opened successfully and exited normally using option `0`.
 Remaining failure / limitation:
 No regression failures were observed. SmartCare remains session-only, so records are lost when the process exits.
 
-
-## D Console and end to end demonstration
 
 ## D Console and end to end demonstration
 
@@ -282,36 +278,74 @@ The items above are accepted future-work or production-readiness limitations rat
 Release-blocker conclusion:
 No unresolved blocker against the applicable UG Stage 12 release scope was identified. The remaining items are documented scope limitations or final release-administration tasks rather than unmet FR, QRY, FP or UI requirements. Any later executable-code change would require focused verification followed by the full regression suite.
 
-
 ## I Git review and integration evidence
 
-Issue / PR / diff links and reviewed SHA: [response]
-Independent reviewer / feedback / response: [response]
-Integration commit / full recheck: [response]
-Tracked and untracked file inspection / cleanliness: [response]
-Secrets/staff material/caches/tool-metadata exclusion check: [response]
-Candidate recovery plan / known-good SHA: [response]
-Named substantive contributions: [response]
+Issue / PR / diff links and reviewed SHA:
+Stage 12 release work was completed on branch `feature/stage12-release` and reviewed through the Stage 12 pull request before integration into `main`. Harleen Partola independently verified the reviewed candidate at SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`.
 
+Independent reviewer / feedback / response:
+Harleen Partola acted as the independent reviewer. She also reproduced the candidate from a fresh clone, confirmed the demo and interactive console worked, and obtained 58 passing tests. No release-blocking issue or unrelated change was identified. No corrective code change was required following the review.
+
+Integration commit / full recheck:
+The approved Stage 12 changes were merged into `main`. After updating local `main`, the full regression suite was rerun from `project/` using `python3 -m pytest -q`. Result: 58 passed, 0 failed. The integrated `main` SHA is `ce62d54cc5b2725c420996be7e121ff035914017`.
+
+Tracked and untracked file inspection / cleanliness:
+`git status --short` produced no output after integration and regression verification, confirming no remaining modified or untracked files in the working tree. The integrated change contained the intended root `README.md`, `project/README.md` and Stage 12 evidence updates.
+
+Secrets/staff material/caches/tool-metadata exclusion check:
+The final reviewed changes contain synthetic SmartCare data only. No credentials, tokens, real patient information, confidential peer forms, staff solutions, environment directories, cache/compiled files or temporary tool-recovery artefacts were intentionally included in the release changes.
+
+Candidate recovery plan / known-good SHA:
+The independently verified pre-merge Stage 12 candidate can be recovered from SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`. The current integrated known-good `main` state is SHA `ce62d54cc5b2725c420996be7e121ff035914017`, verified with 58 passing tests. Git history provides the recovery path without deleting or rewriting earlier work.
+
+Named substantive contributions:
+- Akshera Kandula: Stage 12 release coordination, release-scope review, regression verification, interactive end-to-end demonstration, README/release documentation updates, limitation and technical-debt documentation, release evidence preparation and final integration verification.
+- Harleen Partola: independent Stage 12 review and fresh-clone reproducibility verification, including dependency/setup checks, demo/interactive execution and full regression verification with 58 passing tests.
 
 ## J Human release decision
 
-Decision — READY FOR COURSE RELEASE / READY WITH DOCUMENTED LIMITATIONS / NOT YET READY: [response]
-Approver / date / rationale and evidence: [response]
-What risks remain / conditions / owners: [response]
-Can the team explain the system: [response]
-Can a change be recovered: [response]
-Common decision / PG decision where different: [response]
+Decision — READY FOR COURSE RELEASE / READY WITH DOCUMENTED LIMITATIONS / NOT YET READY:
+**READY WITH DOCUMENTED LIMITATIONS**
+
+Approver / date / rationale and evidence:
+Akshera Kandula and Harleen Partola — 9 November 2026. The group approves the SmartCare UG candidate for course release with the documented limitations. Evidence includes the completed Stage 12 end-to-end demonstration, retained regression suite with 58 passing tests, Harleen's independent fresh-clone verification at candidate SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`, human PR review, successful integration into `main`, and a post-integration full regression result of 58 passed at SHA `ce62d54cc5b2725c420996be7e121ff035914017`.
+
+What risks remain / conditions / owners:
+Remaining risks are documented scope limitations rather than unresolved UG requirements. SmartCare is session-only, uses local naive minute-precision appointment times, and does not provide production authentication/roles, durable persistence, portal access, notifications, billing/insurance, clinical decision support, enterprise concurrency, production monitoring or formal accessibility/usability assurance. These are accepted course-release limitations. Akshera Kandula owns final release packaging and SHA/ZIP correspondence checks before submission.
+
+Can the team explain the system:
+Yes. Both group members have worked with and reviewed the common SmartCare project. The team can explain the main requirements, shared `SmartCareDataStore`, domain/service/query/console responsibilities, booking-conflict and cancellation behaviour, meaningful regression evidence, responsible AI decisions and known limitations.
+
+Can a change be recovered:
+Yes. Git history preserves the reviewed Stage 12 candidate and earlier checkpoints. The independently verified candidate can be recovered at SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`, and the integrated tested `main` state is SHA `ce62d54cc5b2725c420996be7e121ff035914017`. Recovery does not require deleting or rewriting repository history.
+
+Common decision / PG decision where different:
+Common UG decision: **READY WITH DOCUMENTED LIMITATIONS**. PG decision: **Not applicable — both group members are UG students and Stage 10/11 PG requirements are outside the release scope.**
 
 
 ## K Final tested release SHA
 
-Exact common tested SHA: [response]
-Exact PG tested SHA or not applicable: [response]
-Final submitted SHA / repository URL: [response]
-Evidence-only later commit and difference explanation: [response]
-Executable changes after testing and re-verification: [response]
-Source ZIP name / SHA correspondence / extracted comparison: [response]
+Exact tested release SHA:
+`ce62d54cc5b2725c420996be7e121ff035914017`
+
+Tested branch / state:
+`main` after the reviewed Stage 12 pull request was merged.
+
+Verification command and result:
+From `project/`, `python3 -m pytest -q` was run after integration and reported **58 passed, 0 failed**.
+
+Final submitted SHA:
+**Pending final evidence-only commit after Sections K–N are completed and reviewed.**
+
+Difference between tested SHA and final submitted SHA:
+The tested release SHA `ce62d54cc5b2725c420996be7e121ff035914017` identifies the integrated executable release that passed the full regression suite. A later final submitted SHA is expected to contain only completed Stage 12 evidence/documentation. No executable application code is intended to change after the tested SHA. If executable code changes, the affected checks and full regression suite must be rerun before submission.
+
+Common / PG identifiers:
+Common UG tested release SHA: `ce62d54cc5b2725c420996be7e121ff035914017`.
+PG release SHA: Not applicable — this is a UG-only group.
+
+Source / ZIP correspondence:
+The final source ZIP will be generated from the exact final submitted SHA after the remaining Stage 12 evidence is completed and committed. The ZIP will then be extracted and checked against that SHA before submission.
 
 
 ## L Submission package verification
@@ -341,59 +375,101 @@ Remaining administration or release dependency: [response]
 
 ## M Formative questions
 
-1. What is a release candidate? [response]
+1. **What is a release candidate?**  
+A release candidate is a specific version of the software that the team believes is ready for final release checking. It should have the intended scope integrated, be identifiable by an exact Git SHA, and be tested before it is approved for release.
 
-2. What is feature freeze and why is it used? [response]
+2. **What is feature freeze and why is it used?**  
+Feature freeze means stopping optional feature development so the team can focus on verification, defects, documentation and release readiness. It reduces the risk of introducing new problems while preparing the final release.
 
-3. What is regression testing in a release context? [response]
+3. **What is regression testing in a release context?**  
+Regression testing means rerunning previously accumulated tests after integration or changes to confirm that behaviour that worked before still works. For SmartCare, the final integrated release passed the complete suite with 58 tests.
 
-4. What is a known limitation? [response]
+4. **What is a known limitation?**  
+A known limitation is a behaviour or capability that is deliberately not provided by the current release and is clearly documented. For SmartCare, an example is session-only storage, where records are lost when the application exits.
 
-5. What is technical debt? [response]
+5. **What is technical debt?**  
+Technical debt is work that may reasonably be deferred now but could need attention if the system is extended or prepared for a different environment. It should be documented with its impact, priority and possible future action rather than being confused with an unmet current requirement.
 
-6. What are release notes? [response]
+6. **What are release notes?**  
+Release notes summarise what the released version delivers, important fixes or improvements, known limitations and other relevant release information so reviewers and future maintainers can understand the version being released.
 
-7. What is software maintenance? [response]
+7. **What is software maintenance?**  
+Software maintenance is the work performed after a release to correct defects, adapt the system to new needs or environments, and improve its quality. A released version should remain identifiable so later maintenance changes do not silently replace it.
 
-8. What is the purpose of the individual demonstration/viva? [response]
+8. **What is the purpose of the individual demonstration/viva?**  
+The purpose is to confirm that each student genuinely understands the shared SmartCare project and can explain requirements, architecture, testing, debugging, AI decisions, limitations and their own contribution rather than relying only on submitted group artefacts.
 
-9. What should the final responsible-AI check establish before release? [response]
+9. **What should the final responsible-AI check establish before release?**  
+It should establish that significant AI/Copilot suggestions were understood and independently checked, that no unsupported requirements or unexplained changes were introduced, that synthetic data and privacy rules were followed, and that final engineering and release decisions remained human decisions.
 
-10. What is the main course conclusion about AI and the role of the software engineer? [response]
-
+10. **What is the main course conclusion about AI and the role of the software engineer?**  
+AI can assist with tasks such as generating ideas, tests, debugging suggestions and review comments, but software engineers are still responsible for interpreting requirements, judging correctness, evaluating evidence, managing risks, making design and release decisions, and remaining accountable for the final system.
 
 ## N Reflection viva and handover
 
-Strongest evidence SmartCare is ready: [response]
-Weakest area: [response]
-How AI use changed from Stage 1 to Stage 12: [response]
-Start doing — engineering and AI use: [response]
-Stop doing — engineering and AI use: [response]
-Continue doing — engineering and AI use: [response]
-What worked / caused rework / future delivery improvement: [response]
-One paragraph — If AI can write code why do we still need software engineers: [response]
+### Reflection
+
+Strongest evidence that SmartCare is ready:
+The strongest evidence is the combination of the full regression suite, end-to-end demonstration, independent review and fresh-clone verification. The integrated `main` release at SHA `ce62d54cc5b2725c420996be7e121ff035914017` passed 58 tests. The interactive demonstration also verified registration, lookup, booking, practitioner conflict handling, cancellation/history, practitioner listing, invalid-input recovery and normal exit. Harleen independently reproduced the Stage 12 candidate from a fresh clone and also obtained 58 passing tests. Together these provide stronger release evidence than a single successful run.
+
+Weakest area:
+The weakest area is production readiness outside the current course scope. SmartCare stores data only for the current session, uses local naive minute-precision datetimes and has no production authentication/roles, persistence, notifications, billing, clinical decision support, enterprise concurrency, production monitoring or formal accessibility/usability assurance. These are documented limitations rather than failures of the current UG requirements.
+
+How did our use of AI change from Stage 1 to Stage 12:
+In Stage 1, our focus was recognising that AI-generated code or feature suggestions cannot automatically be treated as correct. We identified that client requirements still need human validation and rejected unsupported suggestions such as facial recognition, AI diagnosis, online payment and insurance processing. By Stage 12, our AI use became more evidence-driven. AI/Copilot was used for bounded tasks such as test-design ideas, debugging and review, but suggestions were traced back to requirements and independently verified. For example, a proposed 30-minute appointment-overlap rule was rejected because FR-05 specifies an exact same-practitioner/date-time conflict. The main change was moving from simply recognising that AI needs checking to using explicit Accept/Modify/Reject decisions supported by requirements, code inspection and test evidence.
+
+### Start / Stop / Continue retrospective
+
+| Area | Start doing | Stop doing | Continue doing |
+|---|---|---|---|
+| Engineering practice | Start planning release evidence and reproducibility checks earlier so README, SHA and clean-copy verification are maintained throughout development. | Stop treating a passing test count by itself as proof that the system is correct or release-ready. | Continue using focused branches, human review, requirement-linked tests, full regression checks and exact Git SHAs for important checkpoints. |
+| AI use | Start writing the human expectation and requirement trace before asking AI for implementation, testing or review suggestions. | Stop accepting AI-generated rules, assumptions or suggested features unless they are supported by the approved requirements. | Continue treating AI/Copilot output as candidate advice that must be independently checked, accepted, modified or rejected by the team. |
+
+What worked well:
+Requirement-linked testing, human PR review, keeping one shared `SmartCareDataStore`, retaining earlier tests, and using small focused corrections helped prevent regressions. The Stage 8 debugging work was particularly useful because the team diagnosed behaviour against FR-05 and FR-07 rather than changing tests simply to obtain a green result.
+
+What caused rework:
+Some rework came from needing to revisit documentation, release evidence and branch/integration details late in the process. AI suggestions also required additional checking when they introduced assumptions beyond the requirements, such as the proposed appointment-overlap rule.
+
+What we would improve in a future delivery:
+We would maintain release documentation, known limitations and reproducibility instructions continuously rather than completing much of this at the final release stage. We would also record significant AI decisions and verification evidence immediately when they occur.
+
+What should continue:
+We would continue requirement-first reasoning, meaningful automated tests, independent human review, explicit responsibility boundaries, synthetic-data use and verification of AI-generated suggestions before integration.
+
+### Viva / handover preparation
 
 | Preparation item | Own explanation and evidence link |
 |---|---|
-| Problem and stakeholders | [response] |
-| Two requirements and acceptance criteria | [response] |
-| Domain model and architecture | [response] |
-| Design trade-off | [response] |
-| Meaningful test and its limits / 100 percent coverage | [response] |
-| Diagnosed defect and verification | [response] |
-| Shared store and session-state/query responsibilities | [response] |
-| What would break if session-state lookup/query responsibilities changed? | [response] |
-| Why cancellation is domain behaviour / conflict coordination is service behaviour | [response] |
-| FR-07 retained history test | [response] |
-| Actual AI change rejected/modified or honestly accepted with verification | [response] |
-| Unresolved limitation / future production work | [response] |
-| Personal implementation contribution | [response] |
-| Personal test/review/design/integration contribution | [response] |
-| PG agentic change and rescheduling verification | [response] |
-| PG responsible-AI risk/remediation or supported no finding | [response] |
+| Problem and stakeholders | SmartCare addresses clinic problems caused by spreadsheets and paper records, including duplicate bookings, difficulty locating patient information, inconsistent appointment status and limited history. Stakeholders include reception/admin staff, practitioners, patients and clinic management. |
+| Two requirements and acceptance criteria | FR-05: the same practitioner cannot have another `SCHEDULED` appointment at the exact same datetime, while another practitioner may use that time. FR-06/FR-07: a scheduled appointment can be cancelled, becomes `CANCELLED`, remains stored/retrievable and cannot be cancelled repeatedly. |
+| Domain model and architecture | `Patient`, `Practitioner`, `Appointment` and `AppointmentStatus` represent domain concepts and state. `SmartCareDataStore` holds current-session objects. Services coordinate workflows, query functions perform explicit-input selection/sorting, and the console owns user interaction. |
+| Design trade-off | SmartCare deliberately uses one shared in-memory store instead of persistence. This keeps the course architecture simple and makes object identity/session behaviour clear, but records are lost when the process exits. |
+| Meaningful test and its limits / 100 percent coverage | `test_f8_02_cancelled_appointment_remains_available_in_store` verifies that cancellation changes the appointment to `CANCELLED`, keeps the same appointment retrievable and retains it in the store. Even 100% code coverage would not prove requirement correctness, meaningful assertions or that all important behaviours were tested. |
+| Diagnosed defect and verification | Stage 8 identified defects in practitioner conflict handling and cancelled-history behaviour. Repairs were checked with focused regression tests and then the full suite. The final integrated release passed 58 tests. |
+| Shared store and session-state/query responsibilities | All services use the same `SmartCareDataStore`, allowing them to work with the same registered objects. Query functions receive explicit appointment collections and return filtered/sorted results without mutating the store. |
+| What would break if session-state lookup/query responsibilities changed | Returning replacement objects instead of the stored objects could break identity and retained-history behaviour. Allowing query functions to mutate or secretly access the store would weaken deterministic behaviour and responsibility separation. |
+| Why cancellation is a domain responsibility | Whether an appointment can transition from `SCHEDULED` to `CANCELLED` is a rule about the Appointment object's valid state. The service locates the appointment and coordinates the workflow, while `Appointment.cancel()` protects the state transition itself. |
+| FR-07 retained-history evidence | Cancellation does not delete the appointment. The regression test verifies that the same object remains retrievable with `CANCELLED` status, and the interactive demonstration also showed the cancelled appointment remaining available in history. |
+| Actual AI change rejected/modified or acceptance check | A proposed 30-minute overlap conflict rule was rejected because FR-05 only defines conflict for the same practitioner at the exact same datetime while `SCHEDULED`. Adding an overlap rule would invent an unsupported requirement. |
+| Unresolved limitation / future production work | Session-only storage is the clearest limitation. Real deployment would also require authentication/roles, durable persistence, timezone policy, security, monitoring, concurrency handling and accessibility/usability evaluation. |
+| Personal implementation contribution | Akshera contributed Stage 12 release coordination, regression checking, interactive demonstration, README/release documentation, technical-debt/limitation recording and final integration verification. |
+| Personal test/review/design/integration contribution | Akshera participated in testing, debugging, review and integration across the common SmartCare stages. Harleen independently reviewed and reproduced the Stage 12 candidate from a fresh clone and verified the complete regression suite. |
+| PG agentic change and rescheduling verification | Not applicable — both group members are UG students. |
+| PG responsible-AI risk/remediation or supported no-finding decision | Not applicable — Stage 10 and Stage 11 PG requirements are outside the UG release scope. |
 
-Optional bounded-change practice only: validation rule, focused test, safe error-message change, explicit-input query or agreed status rule with test. Explain expected impact before editing, make a small change, run the test, and identify evidence to inspect if unsure. No live AI unless explicitly permitted. Preserve the submitted candidate.
+Optional bounded-change practice only:
+No additional code change was required for Stage 12. The team preserved the tested release rather than introducing unnecessary late changes.
 
-Practice question/change and reasoning: [response or not undertaken]
-Separate reflection / peer / common team viva evidence links and routing: [response]
-No further coding stage. Later corrections use the published assessment process.
+Practice question/change and reasoning:
+If a small change were required after release testing, we would first identify the exact requirement affected, predict the expected impact, make the smallest justified change, run the focused test and then rerun the full regression suite before accepting a new release candidate.
+
+Separate reflection / peer / common team viva evidence:
+The Stage 12 record supports release evidence and viva preparation. The approximately 500-word group reflection, confidential individual peer forms and common team viva/oral assessment follow their separate teaching-team submission processes.
+
+No further coding stage:
+The integrated tested candidate remains the release baseline. Any later executable change must follow the published correction/review process and be reverified rather than silently replacing the submitted version.
+
+### Closing question — If AI can write code, why do we still need software engineers?
+
+AI can generate code quickly, but software engineering involves much more than producing code. Engineers must understand stakeholder needs, validate requirements, choose appropriate architecture, design meaningful tests, diagnose defects, assess risks, review changes and decide whether evidence is sufficient for release. This matches our Stage 1 conclusion that validating requirements with the client cannot safely be delegated entirely to AI because AI may make assumptions that do not reflect the client's actual needs. The SmartCare project reinforced this throughout the semester: AI helped with suggestions, test ideas and review, but humans had to reject unsupported features, verify behaviour against requirements and remain accountable for the final release.
