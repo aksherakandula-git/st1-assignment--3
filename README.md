@@ -54,3 +54,28 @@ cd ..
 ```
 
 Use the approved environment described in the Git/GitHub group guide. The verified baseline is Python 3.13 with pytest 8.3.5. GitHub Copilot is the nominated assistant; verify significant output and record required decisions. Use synthetic data only. Use each supplied record only when you reach that stage in the applicable sequence.
+
+## Stage 12 Final Release
+
+Release scope: Common undergraduate SmartCare release following Stages 6, 7, 8 and 9.
+
+Current capabilities include:
+- patient registration and lookup
+- practitioner registration and lookup
+- appointment booking and lookup
+- exact-time practitioner conflict prevention
+- appointment cancellation with retained history
+- practitioner appointment listing and status filtering
+- deterministic appointment ordering
+- recoverable interactive console input
+
+### Release verification
+
+Run application and test commands from `project/`.
+
+```bash
+python3 --version
+python3 -m pip install -r requirements-dev.txt
+python3 main.py
+python3 main.py --interactive
+python3 -m pytest -q
