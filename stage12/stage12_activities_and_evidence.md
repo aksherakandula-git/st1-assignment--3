@@ -173,45 +173,114 @@ Available evidence includes the recorded Stage 7 test-design suggestions and Acc
 
 | README item | Location | Verifier | Result/gap |
 |---|---|---|---|
-| Purpose and included common/PG scope | [response] | [response] | [response] |
-| Out-of-scope capabilities and known limitations | [response] | [response] | [response] |
-| Confirmed teaching Python version and dependency installation | [response] | [response] | [response] |
-| Working directory / demo / interactive / test commands | [response] | [response] | [response] |
-| Repository structure and architecture responsibilities | [response] | [response] | [response] |
-| Responsible AI summary / synthetic-data rule | [response] | [response] | [response] |
-| Release label/version and SHA links | [response] | [response] | [response] |
-Root README index and project/README verified: [response]
-Fresh clone or extracted ZIP / candidate identity: [response]
-Verifier and clean environment / actual version: [response]
-Setup/run/test commands and observed results: [response]
-Missing local file or setup gap / remedy and recheck: [response]
+| Purpose and included common/PG scope | Root `README.md` and `project/README.md` | Akshera Kandula; Harleen Partola | Common UG release scope is documented, covering completed Stage 6–9 SmartCare functionality. Stage 10 and Stage 11 PG work is not applicable to this UG-only group. |
+| Out-of-scope capabilities and known limitations | Root `README.md` and `project/README.md` | Akshera Kandula; Harleen Partola | Session-only storage and out-of-scope production capabilities are documented. Records are lost when the process exits; durable persistence and production-only capabilities are outside the current course-release scope. |
+| Confirmed teaching Python version and dependency installation | Root `README.md`, `project/README.md`, `project/requirements-dev.txt` | Akshera Kandula; Harleen Partola | The documented teaching baseline is Python 3.13 with pytest 8.3.5. `requirements-dev.txt` pins `pytest==8.3.5`. Stage 12 verification also succeeded using Python 3.14 environments. |
+| Working directory / demo / interactive / test commands | Root `README.md` and `project/README.md` | Akshera Kandula; Harleen Partola | `project/` is documented as the application working directory. `python main.py`, `python main.py --interactive` and `python -m pytest -q` are documented and were successfully followed during fresh-copy verification. |
+| Repository structure and architecture responsibilities | `project/README.md` | Akshera Kandula; Harleen Partola | Responsibilities for `domain.py`, `data_store.py`, `services.py`, `queries.py`, `console.py` and `main.py` are documented consistently with the implemented architecture. |
+| Responsible AI summary / synthetic-data rule | Root `README.md` and Stage 12 evidence | Akshera Kandula; Harleen Partola | README documents responsible AI use and the synthetic-data rule. AI/Copilot suggestions require human verification and no autonomous AI release approval is claimed. |
+| Release label/version and SHA links | Root `README.md` and Stage 12 evidence | Akshera Kandula; Harleen Partola | Stage 12 candidate branch `feature/stage12-release` was independently verified at SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`. Final submitted SHA will be recorded in Section K after final integration. |
+
+Root README index and `project/README` verified:
+Yes. Both README files were reviewed and updated with the Stage 12 release scope, setup/run/test commands, architecture responsibilities, responsible-AI summary, synthetic-data rule and known limitations.
+
+Fresh clone or extracted ZIP / candidate identity:
+Harleen Partola created a fresh clone of the shared GitHub repository in a separate directory, switched to `feature/stage12-release`, confirmed a clean working tree with `git status --short`, and verified candidate SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`.
+
+Verifier and clean environment / actual version:
+Harleen Partola independently performed the verification from a fresh Windows clone. Her environment showed Python 3.14 64-bit with pytest 8.3.5 available. The verification did not rely on her existing project working copy or local changes.
+
+Setup/run/test commands and observed results:
+Harleen successfully ran `python -m pip install -r requirements-dev.txt`, `python main.py`, `python main.py --interactive` and exited normally using option `0`, then ran `python -m pytest -q`. The complete regression result was 58 passed in 0.12s.
+
+Missing local file or setup gap / remedy and recheck:
+No missing local file, additional setup requirement or release-blocking reproducibility gap was observed during the fresh-copy verification. No corrective action was required.
+
+Session-only synthetic data and minute-precision local time:
+SmartCare uses synthetic data only. Data exists only for the current application session and is lost when the process exits. Appointment datetimes use local naive date/time values at minute precision; persistent storage and timezone conversion are not implemented.
+
+Production auth/roles, portal, notifications, billing/insurance, clinical AI exclusions:
+These capabilities are outside the current course-release scope. SmartCare does not provide production authentication or role management, a patient portal, SMS/email notifications, billing or insurance processing, clinical decision support, or clinical AI functionality.
+
+Scale/concurrency, timezone policy, operations/monitoring, accessibility/usability limitations:
+The course release has not been designed or evaluated for enterprise-scale concurrency, multi-user deployment, formal timezone handling, production operations/monitoring, or formal accessibility/usability compliance. These are documented limitations rather than claims of production readiness.
+
+Difference between accepted scope limit and unresolved required behaviour:
+An accepted scope limitation is functionality deliberately excluded by the current revision 2 requirements, such as durable persistence or production authentication. Unresolved required behaviour would be a failure to satisfy an applicable FR, QRY, FP or UI requirement. No unresolved required UG behaviour was identified during the Stage 12 regression, demonstration and fresh-copy verification checks.
+
+PG assurance residual risks / owner / status or not applicable:
+Not applicable — this is a UG-only group. Stage 10 rescheduling and Stage 11 PG assurance requirements are outside the applicable release scope.
 
 
 ## G Known limitations debt and release notes
 
-Delivered features: [response]
-Important fixes: [response]
-Architecture/quality improvements: [response]
-Known limitations: [response]
-AI-assisted development note: [response]
+### Release notes
 
-| Debt item | Impact | Priority | Future action | Accepted? / release rationale |
+Delivered features:
+- Patient registration and lookup.
+- Practitioner registration and lookup.
+- Appointment booking and lookup.
+- Rejection of a second `SCHEDULED` appointment for the same practitioner at the exact same datetime.
+- Allowing a different practitioner to be booked at the same datetime.
+- Appointment cancellation while retaining cancelled appointment history.
+- Rejection of repeated or invalid cancellation.
+- Practitioner appointment listing with optional status filtering.
+- Deterministic appointment ordering by date/time and then appointment ID.
+- Interactive console with recovery from invalid menu, date, status and lookup input.
+- Current-session SmartCare data using synthetic records only.
+
+Important fixes:
+- Stage 8 practitioner-conflict behaviour was corrected and regression-tested.
+- Stage 8 cancelled-appointment history/lookup behaviour was corrected so cancelled appointments remain stored and retrievable.
+- A review concern involving comparison with the string `"scheduled"` was corrected to use `AppointmentStatus.SCHEDULED`.
+- Stage 9 integrated the query and practitioner-listing behaviour with the console and service layer.
+
+Architecture and quality improvements:
+- `Patient`, `Practitioner`, `Appointment` and `AppointmentStatus` retain domain responsibilities.
+- One shared `SmartCareDataStore` maintains consistent current-session objects across services.
+- Services coordinate workflows without taking over console responsibilities.
+- `appointment_sort_key` and `select_appointments` remain reusable explicit-input query functions.
+- Regression tests from earlier stages were retained rather than weakened or replaced.
+- Stage 12 release verification completed with 58 passing tests and independent fresh-clone verification.
+
+Known limitations:
+- SmartCare stores data only for the current process; records are lost on exit.
+- Appointment datetimes are local naive values at minute precision and no timezone policy is implemented.
+- Production authentication/roles, patient portal, notifications, billing/insurance and clinical decision support are outside the current course scope.
+- The application has not been evaluated for enterprise-scale concurrency, production monitoring, formal accessibility or production healthcare/security certification.
+- Stage 10 rescheduling and Stage 11 PG assurance work are not applicable to this UG-only group.
+
+AI-assisted development note:
+AI/Copilot was used as an engineering assistant for selected test-design, debugging and review activities. Suggestions were checked by the group against the approved requirements, code and observed test results before being accepted, modified or rejected. For example, a proposed 30-minute overlap rule was rejected because FR-05 specifies an exact same-practitioner/date-time conflict rather than an appointment-duration overlap rule. Human reviewers remained responsible for implementation and release decisions.
+
+### Technical debt
+
+| Debt item | Impact | Priority | Future action | Accepted? |
 |---|---|---|---|---|
-| [response] | [response] | [response] | [response] | [response] |
-Session-only synthetic data and minute-precision local time: [response]
-Production auth/roles, portal, notifications, billing/insurance, clinical AI exclusions: [response]
-Scale/concurrency, timezone policy, operations/monitoring, accessibility/usability limitations: [response]
-Difference between accepted scope limit and unresolved required behaviour: [response]
-PG assurance residual risks / owner / status or not applicable: [response]
+| Session-only in-memory storage | Data is lost when the application exits, so the system cannot retain records between sessions. | Medium | If future requirements introduce durable storage, design and verify an appropriate persistence solution without changing current behaviour unexpectedly. | Yes — persistence is outside the current revision 2 scope. |
+| No explicit timezone policy | Local naive appointment datetimes may become ambiguous if the application is extended across locations or timezones. | Low | Define timezone requirements and use timezone-aware datetime handling if future deployment requires it. | Yes — not required for the current course release. |
+| No production authentication or role control | A real deployed healthcare application would require access control and user accountability. | High for production; not applicable to course scope | Define user roles, authentication and authorisation requirements before any real deployment. | Yes — accepted as an out-of-scope production limitation. |
+| No enterprise concurrency or persistence testing | Current tests establish the single-process course workflows but do not establish safe multi-user/enterprise behaviour. | Medium for future deployment | Add concurrency, persistent-storage and integration testing if the application scope expands. | Yes — outside the current course release. |
+| No formal accessibility/usability evaluation | Console behaviour has been functionally tested but not formally evaluated against accessibility/usability standards. | Medium for future user-facing deployment | Conduct structured accessibility and usability evaluation before a production-facing release. | Yes — accepted as future work. |
 
+Technical-debt conclusion:
+The items above are accepted future-work or production-readiness limitations rather than failures of the current UG requirements. No known unmet FR, QRY, FP or UI requirement has been reclassified as technical debt.
 
 ## H Release findings and corrective action
 
-| Requirement/claim | Reproduction/observation | Impact/severity | Owner/action | Corrective diff | Focused/full recheck | Residual limit |
-|---|---|---|---|---|---|---|
-| [response] | [response] | [response] | [response] | [response] | [response] | [response] |
-Justified no-change conclusion if no defect found: [response]
-Release blockers still open / status: [response]
+| Requirement / claim | Reproducible observation | Impact / severity | Owner | Action | Corrective diff | Verification | Remaining limit |
+|---|---|---|---|---|---|---|---|
+| Applicable UG requirements are integrated and working | Full accumulated suite on the Stage 12 candidate reported 58 passed, 0 failed. Interactive release demonstration also completed successfully. | No release blocker identified | Akshera Kandula; Harleen Partola | No code correction required. Preserve the verified candidate and complete final review/integration. | None required | Akshera: 58 passed. Harleen fresh clone: 58 passed at SHA `8a13da96e1ed6a2aff643d2fc8593c59a151474c`. | Tests and demonstrations support the scoped course release but do not establish production healthcare readiness. |
+| README and setup instructions must reproduce the candidate from a clean copy | Harleen cloned the repository into a separate clean directory, switched to `feature/stage12-release`, installed/checked dependencies, ran the demo, interactive console and complete test suite successfully. | No reproducibility blocker identified | Akshera Kandula | README release/setup information was updated before independent verification. | Documentation-only Stage 12 README updates | Fresh-clone verification succeeded with 58 passed and no additional setup step required. | Final source ZIP still needs to be produced from and checked against the final submitted SHA. |
+| Cancellation must retain appointment history | Release demonstration showed a cancelled appointment remained findable as `CANCELLED`; retained regression tests also verify retained history and repeated cancellation rejection. | No release blocker identified | Group | No Stage 12 correction required. | None | Relevant regression tests retained and full suite passed. | Session history is retained only for the current process because persistence is intentionally out of scope. |
+| Same-practitioner exact-time conflict must be enforced without inventing an overlap rule | Exact-time same-practitioner conflict was rejected, while a different practitioner at the same time was allowed. A proposed 30-minute overlap rule was rejected because it was not supported by FR-05. | No release blocker identified | Group | Keep current exact-time rule and reject unsupported feature expansion. | None | Interactive demonstration and retained conflict tests passed. | Appointment-duration/overlap scheduling is not part of the current requirement set. |
+| Query/listing behaviour must remain deterministic and non-mutating | Practitioner listing supports default all-status results and explicit status filtering. Query functions remain explicit-input functions with deterministic date/time then ID ordering. | No release blocker identified | Group | No correction required. | None | Stage 9 tests retained; full Stage 12 suite passed. | Equal-time tie behaviour is primarily demonstrated through automated tests rather than the simple console flow. |
+| Current release must disclose significant limitations rather than hide them | README and Stage 12 evidence document session-only storage, local naive minute-precision time, and production features that are outside scope. | No blocker; documented limitation | Akshera Kandula | Retain limitations in README/release evidence. | Documentation updates only | README review and fresh-copy check completed successfully. | No durable persistence, production authentication/roles, portal, notifications, billing/insurance, clinical AI, enterprise concurrency, monitoring or formal accessibility/usability assurance. |
+| No unexplained or unsafe AI-generated release change should remain | Significant AI/Copilot suggestions were checked against requirements and tests; unsupported overlap behaviour was rejected. No autonomous AI release approval was used. | No release blocker identified | Akshera Kandula; Harleen Partola | Continue human review of final diff and release decision. | None | AI decisions are recorded in Stage 7/8 and Stage 12 evidence; full regression suite passed after accepted work. | AI assistance does not prove correctness; final accountability remains with the group. |
+| PG rescheduling and assurance scope | Both members are UG students, so Stage 10 and Stage 11 PG requirements do not apply. | Not applicable | Not applicable | Leave supplied PG-only Stage 10/11 records unchanged. | None | Cohort/scope reviewed against Stage 12 pathway. | None for the UG release scope. |
+
+Release-blocker conclusion:
+No unresolved blocker against the applicable UG Stage 12 release scope was identified. The remaining items are documented scope limitations or final release-administration tasks rather than unmet FR, QRY, FP or UI requirements. Any later executable-code change would require focused verification followed by the full regression suite.
 
 
 ## I Git review and integration evidence
